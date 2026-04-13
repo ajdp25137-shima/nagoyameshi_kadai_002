@@ -1,5 +1,5 @@
 from django.db import models
-from base.models.categories_model import Category  # カテゴリモデルを別アプリ想定
+from .categories_model import Category  # カテゴリモデルを別アプリ想定
 
 class Restaurant(models.Model):
     id = models.AutoField(primary_key=True)

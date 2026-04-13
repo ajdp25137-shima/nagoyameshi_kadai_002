@@ -129,4 +129,4 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-AUTH_USER_MODEL = 'base.Admin'
+AUTH_USER_MODEL = 'base.User'  # カスタムユーザーモデルを使用する場合の設定

@@ -16,7 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from base.views import UserCreateView, UserListView, AdminListView, AdminCreateView, CategoryListView
+from base.views import UserCreateView, UserListView, AdminListView, AdminCreateView
+from . import views
 
 
 
@@ -29,4 +30,7 @@ urlpatterns = [
     path('categories/', include('categories.urls')),
     path('restaurants/', include('restaurants.urls')),
     path('reservations/', include('reservations.urls')),
+    path('restaurant/<int:restaurant_id>/reviews/', views.ReviewListView.as_view(), name='review_list'),
+    path('restaurant/<int:restaurant_id>/reviews/add/', views.ReviewCreateView.as_view(), name='review_create'),
+    path('company/', views.CompanyInformationDetailView.as_view(), name='company_info'),
 ]

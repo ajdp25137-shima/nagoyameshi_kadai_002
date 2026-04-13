@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from restaurants_model import Restaurant
+from .restaurants_model import Restaurant
 
 User = settings.AUTH_USER_MODEL
 
