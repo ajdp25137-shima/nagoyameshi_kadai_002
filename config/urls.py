@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from base.views import UserCreateView, UserListView, AdminListView, AdminCreateView
-from . import views
+from base import views
 
 
 
@@ -27,9 +27,9 @@ urlpatterns = [
     path('admins/', AdminListView.as_view(), name='admin_list'),
     path('admins/create/', AdminCreateView.as_view(), name='admin_create'),
     path('users/', UserListView.as_view(), name='user_list'),
-    path('categories/', include('categories.urls')),
-    path('restaurants/', include('restaurants.urls')),
-    path('reservations/', include('reservations.urls')),
+    path('categories/', include('base.urls')),
+    path('restaurants/', include('base.urls')),
+    path('reservations/', include('base.urls')),
     path('restaurant/<int:restaurant_id>/reviews/', views.ReviewListView.as_view(), name='review_list'),
     path('restaurant/<int:restaurant_id>/reviews/add/', views.ReviewCreateView.as_view(), name='review_create'),
     path('company/', views.CompanyInformationDetailView.as_view(), name='company_info'),
