@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // SetupIntentを取得
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-        const response = await fetch('/subscription/setup-intent/', {
+        const response = await fetch('/subscription/create-intent/', {
             method: 'POST',
             headers: {
                 'X-CSRFToken': csrfToken,

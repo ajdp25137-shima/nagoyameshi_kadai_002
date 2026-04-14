@@ -24,34 +24,19 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-    path('', include('base.urls')),
+    # 1. 外部・管理用
     path('admin/', admin.site.urls),
-    path('users/create/', UserCreateView.as_view(), name='user_create'),
-    path('admins/', AdminListView.as_view(), name='admin_list'),
-    path('admins/create/', AdminCreateView.as_view(), name='admin_create'),
-    path('users/', UserListView.as_view(), name='user_list'),
-    path('categories/', include('base.urls')),
-    path('restaurants/', include('base.urls')),
-    path('reservations/', include('base.urls')),
-    path('restaurant/<int:restaurant_id>/reviews/', views.ReviewListView.as_view(), name='review_list'),
-    path('restaurant/<int:restaurant_id>/reviews/add/', views.ReviewCreateView.as_view(), name='review_create'),
-    path('company/', views.CompanyInformationDetailView.as_view(), name='company_info'),
-    path('favorites/', include('base.urls')),
-    # サブスクリプション
-    path('subscription/', views.SubscriptionCreateView.as_view(), name='subscription_create'),
-    path('subscription/complete/', views.SubscriptionCompleteView.as_view(), name='subscription_complete'),
-    path('subscription/cancel/', views.SubscriptionCancelView.as_view(), name='subscription_cancel'),
-    path('subscription/cancel/complete/', views.SubscriptionCancelCompleteView.as_view(), name='subscription_cancel_complete'),
-    path('subscription/payment/', views.PaymentMethodUpdateView.as_view(), name='payment_update'),
-    path('subscription/payment/complete/', views.PaymentUpdateCompleteView.as_view(), name='payment_update_complete'),
-    path('subscription/setup-intent/', views.CreatePaymentIntentView.as_view(), name='create_setup_intent'),
-    # プロフィール
+    path('accounts/', include('allauth.urls')),
+
+
     path('profile/', views.ProfileDetailView.as_view(), name='profile_detail'),
     path('profile/edit/', views.ProfileEditView.as_view(), name='profile_edit'),
 
-    path('accounts/', include('allauth.urls')),
+    path('company/', views.CompanyInformationDetailView.as_view(), name='company_info'),
 
+    # 3. アプリ全体のURLを一括管理
+    # ※ path('favorites/', ...) など、個別の include('base.urls') は全て消してください
+    path('', include('base.urls')), 
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-

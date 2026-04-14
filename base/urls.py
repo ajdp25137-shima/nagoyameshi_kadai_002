@@ -11,8 +11,24 @@ from .views.company_informations_view import *
 from .views.favorites_view import *
 
 urlpatterns = [
-    path('', top_page, name='top_page'), 
+    path('', top_page, name='top_page'),
 
+    ## --- サブスクリプション関連 ---
+    # 1. 登録ページ表示用（URLをこれ1本に絞る）
+    path('subscription/register/', views.SubscriptionCreateView.as_view(), name='subscription_create'),
+
+    # 2. 完了ページ
+    path('subscription/complete/', views.SubscriptionCompleteView.as_view(), name='subscription_complete'),
+
+    # 3. StripeのIntent作成（API用：URLを完全に分ける）
+    path('subscription/create-intent/', views.CreatePaymentIntentView.as_view(), name='create_setup_intent'),
+
+    # 4. 解約・支払い変更
+    path('subscription/cancel/', views.SubscriptionCancelView.as_view(), name='subscription_cancel'),
+    path('subscription/cancel/complete/', views.SubscriptionCancelCompleteView.as_view(), name='subscription_cancel_complete'),
+    path('subscription/payment/', views.PaymentMethodUpdateView.as_view(), name='payment_update'),
+    path('subscription/payment/complete/', views.PaymentUpdateCompleteView.as_view(), name='payment_update_complete'),
+    
     # 飲食店
     path('restaurants/', RestaurantListView.as_view(), name='restaurant_list'),
     path('restaurants/<int:pk>/', RestaurantDetailView.as_view(), name='restaurant_detail'),
