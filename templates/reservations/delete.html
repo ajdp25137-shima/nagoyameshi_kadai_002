@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}予約キャンセル確認 | Nagoyameshi{% endblock %}
+
+{% block extra_css %}
+<style>
+    .cancel-container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .card-confirm {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 0;
+        border-top: 5px solid var(--wagashi-red);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+    .card-title-jp {
+        font-family: 'Noto Serif JP', serif;
+        color: var(--katsu-iro);
+        border-bottom: 1px solid #eee;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+    }
+    .reservation-details {
+        background-color: var(--washi-bg);
+        padding: 20px;
+        border-left: 3px solid var(--wagashi-red);
+        margin-bottom: 30px;
+    }
+    .detail-label {
+        font-weight: bold;
+        color: #666;
+        width: 100px;
+        display: inline-block;
+    }
+    .btn-cancel-confirm {
+        background-color: var(--wagashi-red);
+        color: white;
+        border-radius: 0;
+        padding: 10px 30px;
+        font-weight: bold;
+        transition: 0.3s;
+        border: none;
+    }
+    .btn-cancel-confirm:hover {
+        background-color: #8a2228;
+        color: white;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .btn-back {
+        color: var(--katsu-iro);
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .btn-back:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cancel-container">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'top_page' %}" class="text-decoration-none" style="color: var(--katsu-iro);">トップ</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'reservation_list' %}" class="text-decoration-none" style="color: var(--katsu-iro);">予約一覧</a></li>
+            <li class="breadcrumb-item active" aria-current="page">予約キャンセル確認</li>
+        </ol>
+    </nav>
+
+    <div class="card card-confirm p-4 p-md-5">
+        <h2 class="card-title-jp text-center">予約のキャンセル確認</h2>
+        
+        <p class="text-center mb-4">以下の予約をキャンセルしてもよろしいですか？<br><small class="text-danger">※この操作は取り消せません。</small></p>
+
+        <div class="reservation-details">
+            <div class="mb-2">
+                <span class="detail-label">店舗名</span>
+                <span class="fw-bold">{{ reservation.restaurant.name }}</span>
+            </div>
+            <div class="mb-2">
+                <span class="detail-label">予約日</span>
+                <span>{{ reservation.reserved_datetime|date:"Y年m月d日" }}</span>
+            </div>
+            <div class="mb-2">
+                <span class="detail-label">時間</span>
+                <span>{{ reservation.reserved_datetime|date:"H:i" }}</span>
+            </div>
+            <div class="mb-0">
+                <span class="detail-label">人数</span>
+                <span>{{ reservation.number_of_people }} 名様</span>
+            </div>
+        </div>
+
+        <form method="post" class="text-center">
+            {% csrf_token %}
+            <div class="d-grid gap-3">
+                <button type="submit" class="btn btn-cancel-confirm">
+                    <i class="fa-solid fa-calendar-xmark me-2"></i>予約をキャンセルする
+                </button>
+                <a href="{% url 'reservation_list' %}" class="btn-back mt-2">
+                    予約一覧に戻る
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
