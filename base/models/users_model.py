@@ -39,6 +39,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']
 
-class Meta:
+    class Meta:
         verbose_name = "会員"          # 単数形での表示名
         verbose_name_plural = "会員"   # 複数形での表示名（日本語なら同じでOK）

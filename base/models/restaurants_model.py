@@ -31,6 +31,6 @@ class Restaurant(models.Model):
     def __str__(self):
         return self.name
 
-class Meta:
+    class Meta:
         verbose_name = "レストラン"          # 単数形での表示名
         verbose_name_plural = "レストラン"   # 複数形での表示名
