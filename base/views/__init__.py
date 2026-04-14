@@ -7,3 +7,4 @@ from .reviews_view import *
 from .company_informations_view import *
 from .favorites_view import *
 from .subscriptions_view import *
+from .profile_view import *

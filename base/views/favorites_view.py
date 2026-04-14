@@ -2,6 +2,7 @@ from django.views import View
 from django.shortcuts import redirect, get_object_or_404
 from base.models import Favorite, Restaurant
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView, DetailView, CreateView
 
 
 class FavoriteAddView(LoginRequiredMixin, View):

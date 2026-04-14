@@ -14,8 +14,8 @@
     <style>
         :root {
             --wagashi-red: #B22D35; /* 伝統的な朱色 */
-            --katsu-iro: #002B41;  /* 藍色（勝色） */
-            --washi-bg: #F9F7F2;   /* 和紙のような柔らかな白 */
+            --katsu-iro: #002B41;   /* 藍色（勝色） */
+            --washi-bg: #F9F7F2;    /* 和紙のような柔らかな白 */
         }
 
         body {
@@ -43,8 +43,8 @@
 
         .navbar-brand span {
             color: var(--wagashi-red);
-            font-size: 1rem;
-            margin-left: 5px;
+            font-size: 1.1rem;
+            margin-left: 8px;
         }
 
         .nav-link {
@@ -57,19 +57,16 @@
             color: var(--wagashi-red) !important;
         }
 
-        /* 和風ボタン（Bootstrapのカスタム） */
-        .btn-nagoya {
-            background-color: var(--wagashi-red);
-            color: white;
-            border: none;
-            border-radius: 0; /* 角を丸めないのが和風 */
-            padding: 8px 20px;
-            transition: 0.3s;
+        /* ドロップダウンの和風アレンジ */
+        .dropdown-menu {
+            border-radius: 0;
+            border: 1px solid var(--katsu-iro);
+            box-shadow: 4px 4px 0px rgba(0, 43, 65, 0.1);
         }
 
-        .btn-nagoya:hover {
-            background-color: var(--katsu-iro);
-            color: white;
+        .dropdown-item:hover {
+            background-color: var(--washi-bg);
+            color: var(--wagashi-red);
         }
 
         /* メインコンテンツエリア */
@@ -92,7 +89,7 @@
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
             <a class="navbar-brand" href="{% url 'top_page' %}">
-                なごやめし<span>Nagoyameshi</span>
+                Nagoyameshi<span>-なごやめし-</span>
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,17 +98,49 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-lg-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-user-plus me-1"></i>会員登録</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-right-to-bracket me-1"></i>ログイン</a>
-                    </li>
-                    <li class="nav-item ms-lg-3">
-                        <a class="btn btn-nagoya" href="{% url 'reservation_list' %}">
-                            <i class="fa-solid fa-calendar-check me-1"></i>予約一覧
-                        </a>
-                    </li>
+                    
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-circle-user me-1"></i>マイページ
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{% url 'user_detail' %}"><i class="fa-solid fa-address-card me-2"></i>会員情報</a></li>
+                                
+                                {% if not user.is_premium %}
+                                    <li><a class="dropdown-item" href="{% url 'subscription_register' %}"><i class="fa-solid fa-gem me-2" style="color: gold;"></i>有料会員登録</a></li>
+                                {% else %}
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{% url 'reservation_list' %}"><i class="fa-solid fa-calendar-check me-2"></i>予約一覧</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'favorite_list' %}"><i class="fa-solid fa-heart me-2"></i>お気に入り一覧</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'payment_edit' %}"><i class="fa-solid fa-credit-card me-2"></i>支払い情報編集</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-muted" href="{% url 'subscription_cancel' %}"><i class="fa-solid fa-unbond me-2"></i>有料会員解約</a></li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                        <li class="nav-item ms-lg-3">
+                            <form action="{% url 'logout' %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="nav-link btn btn-link" style="text-decoration: none;">
+                                    <i class="fa-solid fa-right-from-bracket me-1"></i>ログアウト
+                                </button>
+                            </form>
+                        </li>
+
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account_signup' %}">
+                                <i class="fa-solid fa-user-plus me-1"></i>会員登録
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account_login' %}">
+                                <i class="fa-solid fa-right-to-bracket me-1"></i>ログイン
+                            </a>
+                        </li>
+                    {% endif %}
+                    
                 </ul>
             </div>
         </div>
@@ -124,7 +153,7 @@
 
     <footer class="text-center">
         <div class="container">
-            <p class="mb-2">{{ TITLE }}</p>
+            <p class="mb-2">Nagoyameshi - Specialty of Nagoya Restaurant Guide</p>
             <p class="small mb-0">&copy; 2026 Nagoya Gourmet Guide. All Rights Reserved.</p>
         </div>
     </footer>
