@@ -9,3 +9,4 @@ admin.site.register(User)
 admin.site.register(Admin)  # Adminモデルも管理画面に登録
 admin.site.register(Review)
 admin.site.register(CompanyInformation)
+admin.site.register(Favorite)

@@ -16,8 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from base.views import UserCreateView, UserListView, AdminListView, AdminCreateView
+from base.views import UserCreateView, UserListView, AdminListView, AdminCreateView, favorites_view
 from base import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 
@@ -33,4 +35,7 @@ urlpatterns = [
     path('restaurant/<int:restaurant_id>/reviews/', views.ReviewListView.as_view(), name='review_list'),
     path('restaurant/<int:restaurant_id>/reviews/add/', views.ReviewCreateView.as_view(), name='review_create'),
     path('company/', views.CompanyInformationDetailView.as_view(), name='company_info'),
+    path('favorites/', include('base.urls'))
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

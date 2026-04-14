@@ -1,9 +1,7 @@
 from django import forms
-from django.contrib.auth import get_user_model
-from base.models import Admin
+from base.models import Admin, User  # AdminモデルとUserモデルをインポート
 from django.contrib.auth.hashers import make_password
 
-User = get_user_model()
 
 class UserCreateForm(forms.ModelForm):
     password = forms.CharField(

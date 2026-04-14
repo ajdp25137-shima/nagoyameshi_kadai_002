@@ -15,6 +15,11 @@ from .views import (
     ReservationDeleteView
 )
 
+from .views import (
+    FavoriteAddView,
+    FavoriteDeleteView
+)
+
 urlpatterns = [
     path('', CategoryListView.as_view(), name='category_list'),
     path('restaurants/', RestaurantListView.as_view(), name='restaurant_list'),
@@ -26,4 +31,7 @@ urlpatterns = [
     path('reservations/<int:pk>/', ReservationDetailView.as_view(), name='reservation_detail'),
     path('reservations/create/', ReservationCreateView.as_view(), name='reservation_create'),
     path('reservations/<int:pk>/delete/', ReservationDeleteView.as_view(), name='reservation_delete'),
+    path('favorites/add/<int:restaurant_id>/', FavoriteAddView.as_view(), name='favorite_add'),
+    path('favorites/delete/<int:restaurant_id>/', FavoriteDeleteView.as_view(), name='favorite_delete'),
+
 ]

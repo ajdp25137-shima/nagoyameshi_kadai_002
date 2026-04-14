@@ -6,4 +6,4 @@ from .reservations_model import *
 from .restaurants_model import *
 from .users_model import *
 from .reviews_model import *
-
+from .favorites_model import *

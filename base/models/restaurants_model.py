@@ -11,6 +11,7 @@ class Restaurant(models.Model):
     )
 
     name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='restaurants/', null=True, blank=True)  # ←追加
     description = models.TextField(blank=True)
 
     phone_number = models.CharField(max_length=20)

@@ -5,3 +5,4 @@ from .restaurants_view import *
 from .reservations_view import *
 from .reviews_view import *
 from .company_informations_view import *
+from .favorites_view import *
