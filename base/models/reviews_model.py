@@ -21,3 +21,7 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.restaurant.name} ({self.rating})"
+
+class Meta:
+        verbose_name = "レビュー"
+        verbose_name_plural = "レビュー"

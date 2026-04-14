@@ -30,3 +30,7 @@ class Reservation(models.Model):
 
     class Meta:
         ordering = ['-reserved_at']
+
+class Meta:
+        verbose_name = "予約"
+        verbose_name_plural = "予約"
