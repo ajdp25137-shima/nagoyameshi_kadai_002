@@ -85,7 +85,7 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-
+    {% block navbar %}
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
             <a class="navbar-brand" href="{% url 'top_page' %}">
@@ -105,22 +105,22 @@
                                 <i class="fa-solid fa-circle-user me-1"></i>マイページ
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{% url 'user_detail' %}"><i class="fa-solid fa-address-card me-2"></i>会員情報</a></li>
+                                <li><a class="dropdown-item" href="{% url 'profile_detail' %}"><i class="fa-solid fa-address-card me-2"></i>会員情報</a></li>
                                 
                                 {% if not user.is_premium %}
-                                    <li><a class="dropdown-item" href="{% url 'subscription_register' %}"><i class="fa-solid fa-gem me-2" style="color: gold;"></i>有料会員登録</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'subscription_create' %}"><i class="fa-solid fa-gem me-2" style="color: gold;"></i>有料会員登録</a></li>
                                 {% else %}
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{% url 'reservation_list' %}"><i class="fa-solid fa-calendar-check me-2"></i>予約一覧</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'favorite_list' %}"><i class="fa-solid fa-heart me-2"></i>お気に入り一覧</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'payment_edit' %}"><i class="fa-solid fa-credit-card me-2"></i>支払い情報編集</a></li>
+                                    <li><a class="dropdown-item" href=#><i class="fa-solid fa-calendar-check me-2"></i>予約一覧</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'favorites_list' %}"><i class="fa-solid fa-heart me-2"></i>お気に入り一覧</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'subscription_payment_update' %}"><i class="fa-solid fa-credit-card me-2"></i>支払い情報編集</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item text-muted" href="{% url 'subscription_cancel' %}"><i class="fa-solid fa-unbond me-2"></i>有料会員解約</a></li>
                                 {% endif %}
                             </ul>
                         </li>
                         <li class="nav-item ms-lg-3">
-                            <form action="{% url 'logout' %}" method="post" class="d-inline">
+                            <form action="{% url 'account_logout' %}" method="post" class="d-inline">
                                 {% csrf_token %}
                                 <button type="submit" class="nav-link btn btn-link" style="text-decoration: none;">
                                     <i class="fa-solid fa-right-from-bracket me-1"></i>ログアウト
@@ -145,6 +145,7 @@
             </div>
         </div>
     </nav>
+    {% endblock %}
 
     <main class="container py-4">
         {% block content %}

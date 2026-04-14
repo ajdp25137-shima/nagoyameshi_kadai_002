@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block navbar %}{% endblock %} {# ナビバーを非表示 #}
+
+{% block title %}Sign Up | Nagoyameshi{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card shadow-sm border-0 p-4" style="width: 100%; max-width: 450px; background-color: white;">
+        <div class="text-center mb-4">
+            <h2 class="font-serif fw-bold" style="color: var(--katsu-iro);">Sign Up</h2>
+            <p class="text-muted small">- 新規会員登録 -</p>
+        </div>
+
+        <form method="post" action="{% url 'account_signup' %}">
+            {% csrf_token %}
+            
+            {% for field in form %}
+            <div class="mb-3">
+                <label class="form-label small fw-bold">
+                    {{ field.label }} {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+                </label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="text-danger x-small">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-nagoya w-100 py-2 mt-3">登録する (Register)</button>
+        </form>
+
+        <div class="mt-4 p-3 bg-light text-center small">
+            <p class="mb-1"><i class="fa-solid fa-gem text-warning me-1"></i>有料会員（サブスクリプション）をご希望ですか？</p>
+            <p class="text-muted mb-0">登録後、マイページよりいつでもアップグレード可能です。</p>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'account_login' %}" class="text-decoration-none small text-muted">すでにアカウントをお持ちの方（ログイン）</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* formタグ内のinputをBootstrap風に整える */
+    form input {
+        display: block;
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 0;
+    }
+</style>
+{% endblock %}

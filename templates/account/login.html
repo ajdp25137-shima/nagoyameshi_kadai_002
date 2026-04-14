@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block navbar %}{% endblock %} {# ナビバーを非表示 #}
+
+{% block title %}Login | Nagoyameshi{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card shadow-sm border-0 p-4" style="width: 100%; max-width: 400px; background-color: white;">
+        <div class="text-center mb-4">
+            <h2 class="font-serif fw-bold" style="color: var(--katsu-iro);">Login</h2>
+            <p class="text-muted small">- なごやめしへようこそ -</p>
+        </div>
+
+        <form method="post" action="{% url 'account_login' %}">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label class="form-label small fw-bold">Email Address</label>
+                <input type="email" name="login" class="form-control rounded-0" placeholder="example@mail.com" required>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label small fw-bold">Password</label>
+                <input type="password" name="password" class="form-control rounded-0" placeholder="Password" required>
+            </div>
+
+            <button type="submit" class="btn btn-nagoya w-100 py-2 mb-3">ログイン (Login)</button>
+            
+            <div class="text-center small">
+                <a href="{% url 'account_reset_password' %}" class="text-decoration-none text-muted">パスワードを忘れた場合</a>
+            </div>
+        </form>
+
+        <hr class="my-4">
+
+        <div class="text-center">
+            <p class="small mb-2">会員登録がお済みでない方</p>
+            <a href="{% url 'account_signup' %}" class="btn btn-outline-dark w-100 rounded-0">新規会員登録</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
