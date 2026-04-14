@@ -12,7 +12,30 @@
 
     <div class="row g-4">
         <div class="col-lg-8">
-            <h1 class="mb-3" style="color: var(--katsu-iro); border-bottom: 2px solid var(--katsu-iro); display: inline-block;">{{ restaurant.name }}</h1>
+            <div class="d-flex align-items-center mb-3">
+                <h1 class="mb-0 me-3" style="color: var(--katsu-iro); border-bottom: 2px solid var(--katsu-iro); display: inline-block;">{{ restaurant.name }}</h1>
+                
+                {# --- お気に入り機能の追加 --- #}
+                {% if user.is_authenticated and is_paid_member %}
+                    {% if is_favorite %}
+                        {# すでにお気に入り登録されている場合：解除ボタン #}
+                        <form action="{% url 'favorite_delete' restaurant.pk %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link text-decoration-none p-0" title="お気に入り解除">
+                                <i class="fa-solid fa-heart fs-3 text-danger"></i>
+                            </button>
+                        </form>
+                    {% else %}
+                        {# お気に入り登録されていない場合：登録ボタン #}
+                        <form action="{% url 'favorite_add' restaurant.pk %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link text-decoration-none p-0" title="お気に入り追加">
+                                <i class="fa-regular fa-heart fs-3 text-danger"></i>
+                            </button>
+                        </form>
+                    {% endif %}
+                {% endif %}
+            </div>
             
             <div class="mb-4 text-center">
                 {% if restaurant.image %}
@@ -38,11 +61,11 @@
                 </div>
             </div>
 
+            {# レビューセクション（変更なし） #}
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h5 class="card-title mb-0" style="font-weight: bold;"><i class="fa-solid fa-star me-2 text-warning"></i>カスタマーレビュー</h5>
-                        
                         {% if user.is_authenticated and is_paid_member %}
                             {% if my_review %}
                                 <a href="#" class="btn btn-sm btn-outline-primary">自分のレビューを編集</a>
@@ -54,7 +77,6 @@
 
                     <div class="review-list">
                         {% if user.is_authenticated and is_paid_member %}
-                            {# --- 有料会員：全件表示（自分のがトップ） --- #}
                             {% if my_review %}
                                 <div class="p-3 mb-3 rounded" style="background-color: #f8f9fa; border-left: 5px solid var(--katsu-iro);">
                                     <span class="badge bg-secondary mb-2">あなたの投稿</span>
@@ -75,9 +97,7 @@
                             {% empty %}
                                 {% if not my_review %}<p class="text-muted small">まだレビューがありません。</p>{% endif %}
                             {% endfor %}
-
                         {% else %}
-                            {# --- 無料会員または未ログイン：最新1件のみ --- #}
                             {% if latest_review %}
                                 <div class="border-bottom py-3">
                                     <h6 class="mb-1">{{ latest_review.title }} <span class="text-warning">★{{ latest_review.score }}</span></h6>
@@ -101,27 +121,28 @@
                 <div class="card border-0 shadow-sm" style="background-color: #fffaf0;">
                     <div class="card-body text-center py-4">
                         <h5 class="card-title mb-3" style="font-weight: bold; color: var(--katsu-iro);">ご予約</h5>
-                        
                         {% if user.is_authenticated %}
                             {% if is_paid_member %}
-                                {# 有料会員：予約ページへリンク #}
+                                {# 有料会員：予約ボタンを表示 #}
                                 <p class="small text-muted mb-4">ご希望の日時を選択して予約を完了してください。</p>
                                 <a href="{% url 'reservation_create' restaurant.pk %}" class="btn btn-primary btn-lg w-100 shadow-sm">
                                     <i class="fa-regular fa-calendar-check me-2"></i>予約する
                                 </a>
                             {% else %}
-                                {# 無料会員：有料登録への案内 #}
+                                {# 無料会員：有料登録を促す #}
                                 <div class="p-3 bg-white rounded border mb-3">
-                                    <p class="small text-danger mb-2"><i class="fa-solid fa-lock me-1"></i>予約機能は有料会員限定です</p>
-                                    <p class="x-small text-muted mb-3">有料会員（月額300円）に登録すると、この店舗の予約が可能になります。</p>
-                                    <a href="{% url 'subscription_create' %}" class="btn btn-warning w-100">有料会員に登録する</a>
+                                    <p class="small mb-2">予約機能を利用するには有料会員登録が必要です。</p>
+                                    <a href="{% url 'subscription_create' %}" class="btn btn-outline-primary w-100">有料会員登録へ</a>
                                 </div>
                             {% endif %}
                         {% else %}
-                            {# 未ログイン #}
-                            <p class="small text-muted mb-3">予約にはログインが必要です。</p>
-                            <a href="{% url 'account_login' %}?next={{ request.path }}" class="btn btn-outline-primary w-100">ログイン</a>
-                        {% endif %}
+                            {# 未ログイン：ログインを促す #}
+                            <div class="p-3 bg-white rounded border mb-3">
+                                <p class="small mb-2">予約するにはログインが必要です。</p>
+                                <a href="{% url 'account_login' %}" class="btn btn-outline-primary w-100">ログイン</a>
+                            </div>
+                        {% endif %} {# ← これらが抜けているとエラーになります #}
+
                     </div>
                 </div>
             </div>

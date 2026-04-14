@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}お気に入り一覧 | Nagoyameshi{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-header {
+        border-left: 5px solid var(--wagashi-red);
+        padding-left: 15px;
+        margin-bottom: 30px;
+        font-family: 'Noto Serif JP', serif;
+    }
+
+    .favorite-card {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 0; /* 和風デザインに合わせてあえて角を丸めない */
+        transition: transform 0.3s, box-shadow 0.3s;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .favorite-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .card-img-wrapper {
+        height: 200px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .card-img-top {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .category-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: rgba(0, 43, 65, 0.8); /* 勝色 */
+        color: #fff;
+        padding: 4px 10px;
+        font-size: 0.8rem;
+    }
+
+    .card-body {
+        padding: 1.25rem;
+    }
+
+    .restaurant-name {
+        font-family: 'Noto Serif JP', serif;
+        color: var(--katsu-iro);
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .restaurant-name:hover {
+        color: var(--wagashi-red);
+    }
+
+    .price-range {
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    .btn-remove {
+        color: #999;
+        font-size: 0.9rem;
+        transition: 0.3s;
+        background: none;
+        border: none;
+        padding: 0;
+    }
+
+    .btn-remove:hover {
+        color: var(--wagashi-red);
+    }
+
+    /* 空の状態のスタイル */
+    .empty-state {
+        padding: 80px 0;
+        text-align: center;
+        background: #fff;
+        border: 1px dashed var(--katsu-iro);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'top_page' %}" class="text-decoration-none text-muted">トップ</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">お気に入り一覧</li>
+                </ol>
+            </nav>
+            
+            <h2 class="page-header">お気に入り一覧</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for favorite in favorite_list %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="favorite-card">
+                <div class="card-img-wrapper">
+                    {% if favorite.restaurant.image %}
+                        <img src="{{ favorite.restaurant.image.url }}" class="card-img-top" alt="{{ favorite.restaurant.name }}">
+                    {% else %}
+                        <img src="{% static 'images/no_image.jpg' %}" class="card-img-top" alt="no image">
+                    {% endif %}
+                    
+                    {% if favorite.restaurant.category %}
+                        <span class="category-badge">{{ favorite.restaurant.category.name }}</span>
+                    {% endif %}
+                </div>
+                
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="mb-0">
+                            <a href="{% url 'restaurant_detail' favorite.restaurant.pk %}" class="restaurant-name">
+                                {{ favorite.restaurant.name }}
+                            </a>
+                        </h5>
+                    </div>
+                    
+                    <p class="card-text text-muted small mb-2">
+                        <i class="fa-solid fa-location-dot me-1"></i>{{ favorite.restaurant.address }}
+                    </p>
+                    
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <span class="price-range">
+                            <i class="fa-solid fa-yen-sign me-1"></i>{{ favorite.restaurant.price_min|default:"-" }} 〜 {{ favorite.restaurant.price_max|default:"-" }}
+                        </span>
+                        
+                        {# お気に入り解除ボタン（フォーム） #}
+                        <form action="{% url 'favorite_delete' favorite.pk %}" method="post" onsubmit="return confirm('お気に入りを解除しますか？');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-remove">
+                                <i class="fa-solid fa-trash-can me-1"></i>解除
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="empty-state">
+                <i class="fa-regular fa-heart fa-3x mb-3 text-muted"></i>
+                <p class="lead mb-4">お気に入りに登録された店舗はありません。</p>
+                <a href="{% url 'top_page' %}" class="btn btn-outline-dark px-4">店舗を探しに行く</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {# ページネーションが必要な場合 #}
+    {% if is_paginated %}
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link text-dark" href="?page={{ page_obj.previous_page_number }}">前へ</a></li>
+            {% endif %}
+            <li class="page-item active"><span class="page-link bg-dark border-dark">{{ page_obj.number }}</span></li>
+            {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link text-dark" href="?page={{ page_obj.next_page_number }}">次へ</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}

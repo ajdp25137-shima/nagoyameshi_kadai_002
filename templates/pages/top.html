@@ -65,13 +65,19 @@
     /* 下部リンクエリア */
     .footer-links {
         border-top: 1px solid #ddd;
-        padding-top: 20px;
+        padding-top: 30px;
         margin-top: 60px;
+        padding-bottom: 40px;
     }
     .footer-links a {
         color: var(--katsu-iro);
         text-decoration: none;
         margin: 0 15px;
+        font-weight: bold;
+    }
+    .footer-links a:hover {
+        text-decoration: underline;
+        color: var(--wagashi-red);
     }
 </style>
 {% endblock %}
@@ -115,49 +121,55 @@
     </div>
 </section>
 
-<section class="mb-5">
-    <h2 class="section-title">Popular Restaurants <small class="text-muted fs-6">- 高評価のお店 -</small></h2>
-    <div class="row row-cols-1 row-cols-md-5 g-4">
-        {% for restaurant in top_rated_restaurants %}
-        <div class="col">
-            <div class="card h-100 restaurant-card">
-                <img src="{% if restaurant.image %}{{ restaurant.image.url }}{% else %}{% static 'images/no_image.jpg' %}{% endif %}" class="card-img-top" alt="{{ restaurant.name }}" style="height: 150px; object-fit: cover;">
-                <div class="card-body p-2">
-                    <h5 class="card-title fs-6 fw-bold mb-1">{{ restaurant.name }}</h5>
-                    <p class="mb-1">
-                        <span class="rating-star"><i class="fa-solid fa-star"></i></span>
-                        {{ restaurant.avg_rating|floatformat:1 }}
-                    </p>
-                    <p class="card-text small text-muted">{{ restaurant.category.name }}</p>
+<div class="container">
+    <section class="mb-5">
+        <h2 class="section-title">Popular Restaurants <small class="text-muted fs-6">- 高評価のお店 -</small></h2>
+        <div class="row row-cols-1 row-cols-md-5 g-4">
+            {% for restaurant in top_rated_restaurants %}
+            <div class="col">
+                <div class="card h-100 restaurant-card">
+                    <img src="{% if restaurant.image %}{{ restaurant.image.url }}{% else %}{% static 'images/no_image.jpg' %}{% endif %}" class="card-img-top" alt="{{ restaurant.name }}" style="height: 150px; object-fit: cover;">
+                    <div class="card-body p-2">
+                        <h5 class="card-title fs-6 fw-bold mb-1">{{ restaurant.name }}</h5>
+                        <p class="mb-1">
+                            <span class="rating-star"><i class="fa-solid fa-star"></i></span>
+                            {{ restaurant.avg_rating|floatformat:1 }}
+                        </p>
+                        <p class="card-text small text-muted">{{ restaurant.category.name }}</p>
+                    </div>
+                    <a href="{% url 'restaurant_detail' restaurant.id %}" class="stretched-link"></a>
                 </div>
-                <a href="{% url 'restaurant_detail' restaurant.id %}" class="stretched-link"></a>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
-</section>
+    </section>
 
-<section class="mb-5">
-    <h2 class="section-title">Available Today <small class="text-muted fs-6">- 本日の空席あり -</small></h2>
-    <div class="row row-cols-1 row-cols-md-5 g-4">
-        {% for restaurant in random_restaurants %}
-        <div class="col">
-            <div class="card h-100 restaurant-card">
-                <img src="{% if restaurant.image %}{{ restaurant.image.url }}{% else %}{% static 'images/no_image.jpg' %}{% endif %}" class="card-img-top" alt="{{ restaurant.name }}" style="height: 150px; object-fit: cover;">
-                <div class="card-body p-2">
-                    <h5 class="card-title fs-6 fw-bold mb-1">{{ restaurant.name }}</h5>
-                    <p class="card-text small mb-0"><i class="fa-solid fa-location-dot me-1"></i>{{ restaurant.address|truncatechars:10 }}</p>
+    <section class="mb-5">
+        <h2 class="section-title">Available Today <small class="text-muted fs-6">- 本日の空席あり -</small></h2>
+        <div class="row row-cols-1 row-cols-md-5 g-4">
+            {% for restaurant in random_restaurants %}
+            <div class="col">
+                <div class="card h-100 restaurant-card">
+                    <img src="{% if restaurant.image %}{{ restaurant.image.url }}{% else %}{% static 'images/no_image.jpg' %}{% endif %}" class="card-img-top" alt="{{ restaurant.name }}" style="height: 150px; object-fit: cover;">
+                    <div class="card-body p-2">
+                        <h5 class="card-title fs-6 fw-bold mb-1">{{ restaurant.name }}</h5>
+                        <p class="card-text small mb-0"><i class="fa-solid fa-location-dot me-1"></i>{{ restaurant.address|truncatechars:10 }}</p>
+                    </div>
+                    <a href="{% url 'restaurant_detail' restaurant.id %}" class="stretched-link"></a>
                 </div>
-                <a href="{% url 'restaurant_detail' restaurant.id %}" class="stretched-link"></a>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
-</section>
+    </section>
 
-<div class="footer-links text-center">
-    <a href="#"><i class="fa-solid fa-building me-1"></i>会社概要 (About Us)</a>
-    <a href="#"><i class="fa-solid fa-file-contract me-1"></i>利用規約 (Terms of Service)</a>
+    <div class="footer-links text-center">
+        <a href="{% url 'info_detail' %}">
+            <i class="fa-solid fa-building me-1"></i>会社概要 (About Us)
+        </a>
+        <a href="{% url 'terms_of_use' %}">
+            <i class="fa-solid fa-file-contract me-1"></i>利用規約 (Terms of Service)
+        </a>
+    </div>
 </div>
 
 {% endblock %}

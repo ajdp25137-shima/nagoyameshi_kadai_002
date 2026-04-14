@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}利用規約 | Nagoyameshi{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'top_page' %}" class="text-decoration-none">トップ</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">利用規約</li>
+                </ol>
+            </nav>
+
+            <div class="card shadow-sm bg-white p-4 p-md-5">
+                <h1 class="text-center mb-5">利用規約</h1>
+                
+                <section class="mb-4">
+                    <h5 class="fw-bold border-bottom pb-2">第1条（はじめに）</h5>
+                    <p>この利用規約は、「Nagoyameshi」（以下「当サービス」）をご利用いただく際の条件を定めるものです。本規約に同意の上、当サービスをご利用ください。</p>
+                </section>
+
+                <section class="mb-4">
+                    <h5 class="fw-bold border-bottom pb-2">第2条（会員登録）</h5>
+                    <p>当サービスの予約機能やレビュー投稿機能を利用するには、会員登録が必要です。会員には「無料会員」と「有料会員」があり、利用できる機能が異なります。</p>
+                </section>
+
+                <section class="mb-4">
+                    <h5 class="fw-bold border-bottom pb-2">第3条（有料会員と決済）</h5>
+                    <p>有料会員は、月額料金を支払うことで全ての機能を利用できます。決済にはクレジットカードが利用可能です。解約はいつでもマイページから行うことができます。</p>
+                </section>
+
+                <section class="mb-4">
+                    <h5 class="fw-bold border-bottom pb-2">第4条（予約とキャンセル）</h5>
+                    <p>予約をキャンセルする場合は、必ず前日までに当サービス上、または直接店舗へ連絡を行ってください。無断キャンセルは、今後の利用を制限させていただく場合があります。</p>
+                </section>
+
+                <section class="mb-4">
+                    <h5 class="fw-bold border-bottom pb-2">第5条（禁止事項）</h5>
+                    <ul>
+                        <li>虚偽の情報での登録や予約</li>
+                        <li>他のお客様や店舗への誹謗中傷、迷惑行為</li>
+                        <li>公序良俗に反する内容のレビュー投稿</li>
+                        <li>システムの不正利用</li>
+                    </ul>
+                </section>
+
+                <section class="mb-4">
+                    <h5 class="fw-bold border-bottom pb-2">第6条（規約の変更）</h5>
+                    <p>当サービスは、必要と判断した場合には、ユーザーに通知することなく本規約を変更することができるものとします。</p>
+                </section>
+
+                <div class="text-center mt-5">
+                    <a href="{% url 'top_page' %}" class="btn btn-primary px-5 py-2">
+                        同意してトップページへ戻る
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

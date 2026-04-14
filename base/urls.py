@@ -51,5 +51,9 @@ urlpatterns = [
     # 必要に応じて追加
     path('categories/', CategoryListView.as_view(), name='category_list'),
 
-    # レビュー関連 (reviews_view.py) なども同様に追加
+ # 1. 会社概要（クラスベースビューを呼び出す場合）
+    path('company-info/', CompanyInformationDetailView.as_view(), name='info_detail'),
+
+    # 2. 利用規約（関数ベースビューを呼び出す場合）
+    path('terms/', terms_of_use, name='terms_of_use'),
 ]

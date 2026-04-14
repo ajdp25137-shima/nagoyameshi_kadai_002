@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}会社概要 | Nagoyameshi{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'top_page' %}" class="text-decoration-none">トップ</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">会社概要</li>
+                </ol>
+            </nav>
+
+            <h1 class="mb-4 text-center">会社概要</h1>
+
+            <div class="card shadow-sm">
+                <div class="card-body p-0">
+                    <table class="table table-hover mb-0">
+                        <tbody>
+                            <tr>
+                                <th class="bg-light w-25 py-3 ps-4">会社名</th>
+                                <td class="py-3 ps-4">{{ company_info.name }}</td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light py-3 ps-4">代表者名</th>
+                                <td class="py-3 ps-4">{{ company_info.representative }}</td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light py-3 ps-4">設立日</th>
+                                <td class="py-3 ps-4">{{ company_info.establishment_date|date:"Y年n月j日" }}</td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light py-3 ps-4">郵便番号</th>
+                                <td class="py-3 ps-4">〒 {{ company_info.postal_code }}</td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light py-3 ps-4">所在地</th>
+                                <td class="py-3 ps-4">{{ company_info.address }}</td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light py-3 ps-4">事業内容</th>
+                                <td class="py-3 ps-4">{{ company_info.business_content|linebreaksbr }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="text-center mt-5">
+                <a href="{% url 'top_page' %}" class="btn btn-outline-dark px-4">
+                    <i class="bi bi-arrow-left me-2"></i>トップページへ戻る
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

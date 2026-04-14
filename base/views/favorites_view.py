@@ -2,8 +2,7 @@ from django.views import View
 from django.shortcuts import redirect, get_object_or_404
 from base.models import Favorite, Restaurant
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, DetailView, CreateView
-
+from django.views.generic import ListView
 
 class FavoriteAddView(LoginRequiredMixin, View):
     def post(self, request, restaurant_id):
@@ -14,7 +13,8 @@ class FavoriteAddView(LoginRequiredMixin, View):
             restaurant=restaurant
         )
 
-        return redirect('restaurant_detail', restaurant_id=restaurant.id)
+        # 修正箇所：restaurant_id= を pk= に変更
+        return redirect('restaurant_detail', pk=restaurant.id)
 
 class FavoriteDeleteView(LoginRequiredMixin, View):
     def post(self, request, restaurant_id):
@@ -23,7 +23,8 @@ class FavoriteDeleteView(LoginRequiredMixin, View):
             restaurant_id=restaurant_id
         ).delete()
 
-        return redirect('restaurant_detail', restaurant_id=restaurant_id)
+        # 修正箇所：restaurant_id= を pk= に変更
+        return redirect('restaurant_detail', pk=restaurant_id)
 
 class FavoriteListView(LoginRequiredMixin, ListView):
     model = Favorite
