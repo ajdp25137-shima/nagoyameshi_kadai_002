@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.db.models import Q, Avg
-from base.models import Restaurant, Category
+from base.models import Restaurant, Category, Review
+
 
 # --- 追加: トップページ用関数 ---
 def top_page(request):
@@ -58,6 +59,38 @@ class RestaurantDetailView(DetailView):
     model = Restaurant
     template_name = 'restaurants/detail.html'
     context_object_name = 'restaurant'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        restaurant = self.get_object()
+        user = self.request.user
+
+        # 1. レビューデータの取得
+        all_reviews = Review.objects.filter(restaurant=restaurant).order_by('-created_at')
+        context['latest_review'] = all_reviews.first()
+
+        # 有料会員判定フラグを初期化
+        is_paid = False
+
+        if user.is_authenticated:
+            # Userモデルまたは関連するProfileモデルから有料会員フラグを取得
+            is_paid = getattr(user, 'is_paid_member', False)
+            
+            # --- ここがポイント！ ---
+            # テンプレートで {% if is_paid_member %} で判定できるようにする
+            context['is_paid_member'] = is_paid
+
+            # 自分のレビューを取得
+            my_review = all_reviews.filter(user=user).first()
+            context['my_review'] = my_review
+            
+            # 有料会員なら全件、そうでなければ空（あるいは最新1件のみはlatest_reviewで対応）
+            if is_paid:
+                context['other_reviews'] = all_reviews.exclude(id=my_review.id) if my_review else all_reviews
+            else:
+                context['other_reviews'] = None
+
+        return context
 
 # --- 作成 (画像アップロード対応) ---
 class RestaurantCreateView(CreateView):

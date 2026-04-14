@@ -3,59 +3,127 @@
 
 {% block content %}
 <div class="container py-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'restaurant_list' %}">店舗一覧</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ restaurant.name }}</li>
-                </ol>
-            </nav>
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'restaurant_list' %}">店舗一覧</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ restaurant.name }}</li>
+        </ol>
+    </nav>
 
-            <h1 class="mb-3">{{ restaurant.name }}</h1>
-
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <h1 class="mb-3" style="color: var(--katsu-iro); border-bottom: 2px solid var(--katsu-iro); display: inline-block;">{{ restaurant.name }}</h1>
+            
             <div class="mb-4 text-center">
                 {% if restaurant.image %}
-                    <img src="{{ restaurant.image.url }}" alt="{{ restaurant.name }}" class="img-fluid rounded shadow-sm">
+                    <img src="{{ restaurant.image.url }}" alt="{{ restaurant.name }}" class="img-fluid rounded shadow w-100" style="max-height: 400px; object-fit: cover;">
                 {% else %}
-                    <img src="{% static 'images/no_image.jpg' %}" alt="No Image" class="img-fluid rounded shadow-sm" style="width: 100%; max-height: 400px; object-fit: cover;">
+                    <img src="{% static 'images/no_image.jpg' %}" alt="No Image" class="img-fluid rounded shadow w-100" style="max-height: 400px; object-fit: cover;">
                 {% endif %}
             </div>
 
-            <div class="card shadow-sm mt-4">
+            <div class="card border-0 shadow-sm mb-4">
                 <div class="card-body">
-                    <h5 class="card-title">店舗情報</h5>
+                    <h5 class="card-title mb-4" style="font-weight: bold;"><i class="fa-solid fa-circle-info me-2"></i>店舗情報</h5>
                     <table class="table">
-                        <tr>
-                            <th>店舗説明</th>
-                            <td>{{ restaurant.description }}</td>
-                        </tr>
-                        <tr>
-                            <th>電話番号</th>
-                            <td>{{ restaurant.phone_number }}</td>
-                        </tr>
-                        <tr>
-                            <th>住所</th>
-                            <td>〒{{ restaurant.postal_code }}<br>{{ restaurant.address }}</td>
-                        </tr>
-                        <tr>
-                            <th>営業時間</th>
-                            <td>{{ restaurant.opening_time }} ～ {{ restaurant.closing_time }}</td>
-                        </tr>
-                        <tr>
-                            <th>価格帯</th>
-                            <td>{{ restaurant.price_min }}円 ～ {{ restaurant.price_max }}円</td>
-                        </tr>
-                        <tr>
-                            <th>座席数</th>
-                            <td>{{ restaurant.seating_capacity }} 席</td>
-                        </tr>
+                        <tbody>
+                            <tr><th style="width: 30%;">店舗説明</th><td>{{ restaurant.description }}</td></tr>
+                            <tr><th>電話番号</th><td>{{ restaurant.phone_number }}</td></tr>
+                            <tr><th>住所</th><td>〒{{ restaurant.postal_code }}<br>{{ restaurant.address }}</td></tr>
+                            <tr><th>価格帯</th><td>{{ restaurant.price_min }}円 ～ {{ restaurant.price_max }}円</td></tr>
+                            <tr><th>営業時間</th><td>{{ restaurant.opening_time }} ～ {{ restaurant.closing_time }}</td></tr>
+                            <tr><th>座席数</th><td>{{ restaurant.seating_capacity }} 席</td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
-            
-            <div class="mt-4 text-center">
-                <a href="{% url 'restaurant_list' %}" class="btn btn-secondary">一覧へ戻る</a>
+
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="card-title mb-0" style="font-weight: bold;"><i class="fa-solid fa-star me-2 text-warning"></i>カスタマーレビュー</h5>
+                        
+                        {% if user.is_authenticated and is_paid_member %}
+                            {% if my_review %}
+                                <a href="{% url 'review_edit' restaurant.pk my_review.pk %}" class="btn btn-sm btn-outline-primary">自分のレビューを編集</a>
+                            {% else %}
+                                <a href="{% url 'review_create' restaurant.pk %}" class="btn btn-sm btn-primary">レビューを投稿する</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+
+                    <div class="review-list">
+                        {% if user.is_authenticated and is_paid_member %}
+                            {# --- 有料会員：全件表示（自分のがトップ） --- #}
+                            {% if my_review %}
+                                <div class="p-3 mb-3 rounded" style="background-color: #f8f9fa; border-left: 5px solid var(--katsu-iro);">
+                                    <span class="badge bg-secondary mb-2">あなたの投稿</span>
+                                    <h6>{{ my_review.title }} <small class="text-muted">（★{{ my_review.score }}）</small></h6>
+                                    <p class="small mb-0">{{ my_review.content }}</p>
+                                </div>
+                            {% endif %}
+                            
+                            {% for review in other_reviews %}
+                                <div class="border-bottom py-3">
+                                    <div class="d-flex justify-content-between">
+                                        <h6 class="mb-1">{{ review.title }} <span class="text-warning">★{{ review.score }}</span></h6>
+                                        <small class="text-muted">{{ review.created_at|date:"Y/m/d" }}</small>
+                                    </div>
+                                    <p class="small mb-0 text-muted">{{ review.content }}</p>
+                                    <p class="small text-end mb-0">投稿者: {{ review.user.username }}</p>
+                                </div>
+                            {% empty %}
+                                {% if not my_review %}<p class="text-muted small">まだレビューがありません。</p>{% endif %}
+                            {% endfor %}
+
+                        {% else %}
+                            {# --- 無料会員または未ログイン：最新1件のみ --- #}
+                            {% if latest_review %}
+                                <div class="border-bottom py-3">
+                                    <h6 class="mb-1">{{ latest_review.title }} <span class="text-warning">★{{ latest_review.score }}</span></h6>
+                                    <p class="small mb-0 text-muted">{{ latest_review.content|truncatechars:50 }}</p>
+                                </div>
+                                <div class="alert alert-info mt-3 py-2 text-center">
+                                    <p class="small mb-2">すべてのレビューを閲覧するには有料会員登録が必要です。</p>
+                                    <a href="{% url 'subscription_create' %}" class="btn btn-sm btn-outline-primary">有料会員登録ページへ</a>
+                                </div>
+                            {% else %}
+                                <p class="text-muted small">まだレビューがありません。</p>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="sticky-top" style="top: 2rem; z-index: 10;">
+                <div class="card border-0 shadow-sm" style="background-color: #fffaf0;">
+                    <div class="card-body text-center py-4">
+                        <h5 class="card-title mb-3" style="font-weight: bold; color: var(--katsu-iro);">ご予約</h5>
+                        
+                        {% if user.is_authenticated %}
+                            {% if is_paid_member %}
+                                {# 有料会員：予約ページへリンク #}
+                                <p class="small text-muted mb-4">ご希望の日時を選択して予約を完了してください。</p>
+                                <a href="{% url 'reservation_create' restaurant.pk %}" class="btn btn-primary btn-lg w-100 shadow-sm">
+                                    <i class="fa-regular fa-calendar-check me-2"></i>予約する
+                                </a>
+                            {% else %}
+                                {# 無料会員：有料登録への案内 #}
+                                <div class="p-3 bg-white rounded border mb-3">
+                                    <p class="small text-danger mb-2"><i class="fa-solid fa-lock me-1"></i>予約機能は有料会員限定です</p>
+                                    <p class="x-small text-muted mb-3">有料会員（月額300円）に登録すると、この店舗の予約が可能になります。</p>
+                                    <a href="{% url 'subscription_create' %}" class="btn btn-warning w-100">有料会員に登録する</a>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            {# 未ログイン #}
+                            <p class="small text-muted mb-3">予約にはログインが必要です。</p>
+                            <a href="{% url 'account_login' %}?next={{ request.path }}" class="btn btn-outline-primary w-100">ログイン</a>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
