@@ -23,3 +23,11 @@ class FavoriteDeleteView(LoginRequiredMixin, View):
         ).delete()
 
         return redirect('restaurant_detail', restaurant_id=restaurant_id)
+
+class FavoriteListView(LoginRequiredMixin, ListView):
+    model = Favorite
+    template_name = 'favorites/list.html'
+    context_object_name = 'favorites'
+
+    def get_queryset(self):
+        return Favorite.objects.filter(user=self.request.user).select_related('restaurant')

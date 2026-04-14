@@ -30,6 +30,7 @@ urlpatterns = [
     # お気に入り関連 (favorites_view.py)
     path('favorites/add/<int:restaurant_id>/', FavoriteAddView.as_view(), name='favorite_add'),
     path('favorites/delete/<int:restaurant_id>/', FavoriteDeleteView.as_view(), name='favorite_delete'),
+    path('favorites/', FavoriteListView.as_view(), name='favorite_list'),
 
     # カテゴリ関連 (categories_view.py)
     # 必要に応じて追加

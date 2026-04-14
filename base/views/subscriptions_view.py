@@ -25,7 +25,7 @@ class SubscriptionCreateView(LoginRequiredMixin, View):
         if not user.stripe_customer_id:
             customer = stripe.Customer.create(
                 email=user.email,
-                name=user.name,
+                metadata={'name': user.name},
                 payment_method=payment_method_id,
                 invoice_settings={'default_payment_method': payment_method_id},
             )
