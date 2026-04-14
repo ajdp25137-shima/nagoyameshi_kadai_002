@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'restaurant_list' %}">店舗一覧</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ restaurant.name }}</li>
+                </ol>
+            </nav>
+
+            <h1 class="mb-3">{{ restaurant.name }}</h1>
+
+            <div class="mb-4 text-center">
+                {% if restaurant.image %}
+                    <img src="{{ restaurant.image.url }}" alt="{{ restaurant.name }}" class="img-fluid rounded shadow-sm">
+                {% else %}
+                    <img src="{% static 'images/no_image.jpg' %}" alt="No Image" class="img-fluid rounded shadow-sm" style="width: 100%; max-height: 400px; object-fit: cover;">
+                {% endif %}
+            </div>
+
+            <div class="card shadow-sm mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">店舗情報</h5>
+                    <table class="table">
+                        <tr>
+                            <th>店舗説明</th>
+                            <td>{{ restaurant.description }}</td>
+                        </tr>
+                        <tr>
+                            <th>電話番号</th>
+                            <td>{{ restaurant.phone_number }}</td>
+                        </tr>
+                        <tr>
+                            <th>住所</th>
+                            <td>〒{{ restaurant.postal_code }}<br>{{ restaurant.address }}</td>
+                        </tr>
+                        <tr>
+                            <th>営業時間</th>
+                            <td>{{ restaurant.opening_time }} ～ {{ restaurant.closing_time }}</td>
+                        </tr>
+                        <tr>
+                            <th>価格帯</th>
+                            <td>{{ restaurant.price_min }}円 ～ {{ restaurant.price_max }}円</td>
+                        </tr>
+                        <tr>
+                            <th>座席数</th>
+                            <td>{{ restaurant.seating_capacity }} 席</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="mt-4 text-center">
+                <a href="{% url 'restaurant_list' %}" class="btn btn-secondary">一覧へ戻る</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

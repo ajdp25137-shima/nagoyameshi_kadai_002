@@ -44,7 +44,7 @@
                             <tr>
                                 <th class="py-3 px-2 text-muted fw-bold">会員区分</th>
                                 <td class="py-3 px-2">
-                                    {% if user.is_premium %}
+                                    {% if user.user_class == 'premium' %}
                                         <span class="badge bg-warning text-dark"><i class="fa-solid fa-crown me-1"></i>有料会員</span>
                                     {% else %}
                                         <span class="badge bg-secondary">無料会員</span>

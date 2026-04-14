@@ -119,9 +119,6 @@
 
                                     <li><a class="dropdown-item" href="{% url 'payment_update' %}"><i class="fa-solid fa-credit-card me-2"></i>支払い情報編集</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li class="nav-item text-danger small">
-                                        デバッグ表示: [{{ user.user_class }}]
-                                    </li>
                                     <li><a class="dropdown-item text-muted" href="{% url 'subscription_cancel' %}"><i class="fa-solid fa-handshake-slash me-2"></i>有料会員解約</a></li>
 
                                 {% else %}

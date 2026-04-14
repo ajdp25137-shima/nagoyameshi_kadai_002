@@ -9,6 +9,7 @@ from .views.reservations_view import *
 from .views.reviews_view import *
 from .views.company_informations_view import *
 from .views.favorites_view import *
+from .views import top_page
 
 urlpatterns = [
     path('', top_page, name='top_page'),
@@ -28,10 +29,10 @@ urlpatterns = [
     path('subscription/cancel/complete/', views.SubscriptionCancelCompleteView.as_view(), name='subscription_cancel_complete'),
     path('subscription/payment/', views.PaymentMethodUpdateView.as_view(), name='payment_update'),
     path('subscription/payment/complete/', views.PaymentUpdateCompleteView.as_view(), name='payment_update_complete'),
-    
+
     # 飲食店
-    path('restaurants/', RestaurantListView.as_view(), name='restaurant_list'),
-    path('restaurants/<int:pk>/', RestaurantDetailView.as_view(), name='restaurant_detail'),
+    path('list/', views.RestaurantListView.as_view(), name='restaurant_list'),
+    path('restaurants/<int:pk>/', views.RestaurantDetailView.as_view(), name='restaurant_detail'),
     # レビューはここ（base/urls.py）で管理する方がミスが減ります
     path('restaurant/<int:restaurant_id>/reviews/', views.ReviewListView.as_view(), name='review_list'),
     path('restaurant/<int:restaurant_id>/reviews/add/', views.ReviewCreateView.as_view(), name='review_create'),

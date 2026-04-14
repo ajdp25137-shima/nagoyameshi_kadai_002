@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}店舗登録 | Nagoyameshi{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-container {
+        background-color: #fff;
+        padding: 40px;
+        border: 1px solid #e0dcd1;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+    .form-label {
+        font-weight: bold;
+        color: var(--katsu-iro);
+        border-left: 4px solid var(--wagashi-red);
+        padding-left: 10px;
+        margin-bottom: 10px;
+    }
+    .btn-submit {
+        background-color: var(--wagashi-red);
+        color: white;
+        border: none;
+        padding: 10px 30px;
+        transition: 0.3s;
+    }
+    .btn-submit:hover {
+        background-color: #8e2329;
+        color: white;
+    }
+    .required-badge {
+        font-size: 0.75rem;
+        background-color: var(--wagashi-red);
+        color: white;
+        padding: 2px 6px;
+        border-radius: 3px;
+        margin-left: 5px;
+        vertical-align: middle;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'restaurant_list' %}" style="color: var(--katsu-iro);">店舗一覧</a></li>
+                <li class="breadcrumb-item active">店舗登録</li>
+            </ol>
+        </nav>
+
+        <div class="form-container">
+            <h2 class="mb-4 text-center" style="font-family: 'Noto Serif JP', serif;">新規店舗登録</h2>
+            
+            <form method="post" enctype="multipart/form-data" action="{% url 'restaurant_list' %}">
+                {% csrf_token %}
+                
+                <div class="mb-4">
+                    <label class="form-label">店舗名<span class="required-badge">必須</span></label>
+                    <input type="text" name="name" class="form-control" placeholder="例：なごや食堂" required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">店舗画像</label>
+                    <input type="file" name="image" class="form-control">
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">店舗説明</label>
+                    <textarea name="description" class="form-control" rows="4" placeholder="お店の特徴をご記入ください"></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label">電話番号<span class="required-badge">必須</span></label>
+                        <input type="tel" name="phone_number" class="form-control" placeholder="052-000-0000" required>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label">郵便番号<span class="required-badge">必須</span></label>
+                        <input type="text" name="postal_code" class="form-control" placeholder="460-0000" required>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">住所<span class="required-badge">必須</span></label>
+                    <input type="text" name="address" class="form-control" placeholder="愛知県名古屋市中区..." required>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label">開店時間<span class="required-badge">必須</span></label>
+                        <input type="time" name="opening_time" class="form-control" required>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label">閉店時間<span class="required-badge">必須</span></label>
+                        <input type="time" name="closing_time" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <label class="form-label">価格帯</label>
+                        <div class="input-group">
+                            <span class="input-group-text">¥</span>
+                            <input type="number" name="price_min" class="form-control" placeholder="最小">
+                            <span class="input-group-text">〜</span>
+                            <input type="number" name="price_max" class="form-control" placeholder="最大">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label">座席数<span class="required-badge">必須</span></label>
+                        <input type="number" name="seating_capacity" class="form-control" required>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label">公開設定<span class="required-badge">必須</span></label>
+                        <select name="is_public" class="form-select" required>
+                            <option value="true">公開</option>
+                            <option value="false">非公開</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-submit shadow-sm w-100">
+                        <i class="fa-solid fa-plus me-2"></i>店舗を登録して一覧に戻る
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
