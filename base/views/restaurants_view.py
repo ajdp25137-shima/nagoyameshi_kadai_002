@@ -7,13 +7,25 @@ from base.models import Restaurant, Category, Review
 
 # --- 追加: トップページ用関数 ---
 def top_page(request):
-    """
-    トップページを表示する関数。
-    base/urls.py から呼び出されます。
-    """
-    # 必要に応じて高評価店などを取得するロジックをここに追加
-    return render(request, 'pages/top.html')
+    # カテゴリ一覧
+    categories = Category.objects.all()
 
+    # 高評価の店舗
+    # reviews__score のアンダースコアは必ず「2つ」連続させてください
+    top_rated_restaurants = Restaurant.objects.annotate(
+        avg_rating=Avg('reviews__rating')
+    ).order_by('-avg_rating')[:5]
+
+    # ランダム表示
+    random_restaurants = Restaurant.objects.order_by('?')[:5]
+
+    context = {
+        'categories': categories,
+        'top_rated_restaurants': top_rated_restaurants,
+        'random_restaurants': random_restaurants,
+    }
+    
+    return render(request, 'pages/top.html', context)
 # --- 店舗一覧 ---
 class RestaurantListView(ListView):
     model = Restaurant
@@ -60,38 +72,42 @@ class RestaurantDetailView(DetailView):
     template_name = 'restaurants/detail.html'
     context_object_name = 'restaurant'
 
+    # ↓ここから下のインデント（空白4つ分）が正しくクラス内に入っている必要があります
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         restaurant = self.get_object()
         user = self.request.user
 
-        # 1. レビューデータの取得
+        # 判定フラグの初期化（必ず外側で定義する）
+        is_paid = False
+        
+        if user.is_authenticated:
+            # 管理者、または有料会員フラグがTrueの場合
+            if user.is_superuser or getattr(user, 'is_paid_member', False):
+                is_paid = True
+            
+            # ターミナルで確認するためのログ
+            print(f"DEBUG: User={user}, is_paid={is_paid}")
+
+        # テンプレートで使用する変数
+        context['is_paid_member'] = is_paid
+
+        # レビュー取得ロジック
         all_reviews = Review.objects.filter(restaurant=restaurant).order_by('-created_at')
         context['latest_review'] = all_reviews.first()
 
-        # 有料会員判定フラグを初期化
-        is_paid = False
-
         if user.is_authenticated:
-            # Userモデルまたは関連するProfileモデルから有料会員フラグを取得
-            is_paid = getattr(user, 'is_paid_member', False)
-            
-            # --- ここがポイント！ ---
-            # テンプレートで {% if is_paid_member %} で判定できるようにする
-            context['is_paid_member'] = is_paid
-
-            # 自分のレビューを取得
             my_review = all_reviews.filter(user=user).first()
             context['my_review'] = my_review
             
-            # 有料会員なら全件、そうでなければ空（あるいは最新1件のみはlatest_reviewで対応）
             if is_paid:
+                # 有料会員なら、自分のレビュー以外を表示
                 context['other_reviews'] = all_reviews.exclude(id=my_review.id) if my_review else all_reviews
             else:
                 context['other_reviews'] = None
-
+        
         return context
-
+    
 # --- 作成 (画像アップロード対応) ---
 class RestaurantCreateView(CreateView):
     model = Restaurant

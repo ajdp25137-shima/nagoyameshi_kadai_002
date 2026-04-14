@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-4">予約一覧</h2>
+
+    <div class="table-responsive bg-white rounded shadow-sm">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>店舗名</th>
+                    <th>予約日時</th>
+                    <th>人数</th>
+                    <th></th>
+                </tr>
+            <tbody>
+              {% for reservation in reservations %}
+              <tr>
+                  <td>
+                      {# 前回の修正：店舗詳細へのリンク #}
+                      <a href="{% url 'restaurant_detail' reservation.restaurant.pk %}" class="text-danger fw-bold">
+                          {{ reservation.restaurant.name }}
+                      </a>
+                  </td>
+                  <td>{{ reservation.reserved_at|date:"Y/m/d H:i" }}</td>
+                  <td>{{ reservation.number_of_people }}名</td>
+                  <td>
+                      {# 予約日時が 現在+1日(cancel_limit) より後であれば削除リンクを表示 #}
+                      {% if reservation.reserved_at > cancel_limit %}
+                          <a href="{% url 'reservation_delete' reservation.pk %}" class="text-danger small">キャンセル</a>
+                      {% else %}
+                          <span class="text-muted small">キャンセル不可</span>
+                      {% endif %} {# ← ここでifが閉じているか確認 #}
+                  </td>
+              </tr>
+              {% empty %} {# ← ここは for の中ではなく、ループ対象が空だった時の処理 #}
+              <tr>
+                  <td colspan="4" class="text-center">予約はありません。</td>
+              </tr>
+              {% endfor %} {# ← ここでしっかり for が閉じているか確認 #}
+          </tbody>
+        </table>
+    </div>
+
+    {% if is_paginated %}
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">前へ</a></li>
+            {% endif %}
+            {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">次へ</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+    <div class="mt-4 text-center">
+        <a href="{% url 'top_page' %}" class="btn btn-outline-secondary">トップページへ戻る</a>
+    </div>
+</div>
+{% endblock %}

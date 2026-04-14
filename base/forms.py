@@ -1,6 +1,7 @@
 from django import forms
-from base.models import Admin, User  # AdminモデルとUserモデルをインポート
+from base.models import Admin, User, Reservation  # AdminモデルとUserモデルをインポート
 from django.contrib.auth.hashers import make_password
+
 
 
 class UserCreateForm(forms.ModelForm):
@@ -42,3 +43,14 @@ class AdminForm(forms.ModelForm):
         if commit:
             admin.save()
         return admin
+    
+class ReservationForm(forms.ModelForm):
+    class Meta:
+        model = Reservation
+        # ↓ ここを 'reserved_datetime' から 'reserved_at' に修正
+        fields = ['reserved_at', 'number_of_people']
+        widgets = {
+            # ↓ ここも修正
+            'reserved_at': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'}),
+            'number_of_people': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
+        }

@@ -121,7 +121,7 @@
         {% for restaurant in top_rated_restaurants %}
         <div class="col">
             <div class="card h-100 restaurant-card">
-                <img src="{{ restaurant.image.url }}" class="card-img-top" alt="{{ restaurant.name }}" style="height: 150px; object-fit: cover;">
+                <img src="{% if restaurant.image %}{{ restaurant.image.url }}{% else %}{% static 'images/no_image.jpg' %}{% endif %}" class="card-img-top" alt="{{ restaurant.name }}" style="height: 150px; object-fit: cover;">
                 <div class="card-body p-2">
                     <h5 class="card-title fs-6 fw-bold mb-1">{{ restaurant.name }}</h5>
                     <p class="mb-1">
@@ -143,7 +143,7 @@
         {% for restaurant in random_restaurants %}
         <div class="col">
             <div class="card h-100 restaurant-card">
-                <img src="{{ restaurant.image.url }}" class="card-img-top" alt="{{ restaurant.name }}" style="height: 150px; object-fit: cover;">
+                <img src="{% if restaurant.image %}{{ restaurant.image.url }}{% else %}{% static 'images/no_image.jpg' %}{% endif %}" class="card-img-top" alt="{{ restaurant.name }}" style="height: 150px; object-fit: cover;">
                 <div class="card-body p-2">
                     <h5 class="card-title fs-6 fw-bold mb-1">{{ restaurant.name }}</h5>
                     <p class="card-text small mb-0"><i class="fa-solid fa-location-dot me-1"></i>{{ restaurant.address|truncatechars:10 }}</p>
