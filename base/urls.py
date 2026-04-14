@@ -35,7 +35,7 @@ urlpatterns = [
     path('restaurants/<int:pk>/', views.RestaurantDetailView.as_view(), name='restaurant_detail'),
     # レビューはここ（base/urls.py）で管理する方がミスが減ります
     path('restaurant/<int:restaurant_id>/reviews/', views.ReviewListView.as_view(), name='review_list'),
-    path('restaurant/<int:restaurant_id>/reviews/add/', views.ReviewCreateView.as_view(), name='review_create'),
+    path('restaurant/<int:restaurant_id>/reviews/add/', views.ReviewCreateView.as_view(), name='review_form'),
 
     # お気に入り（これで URL は /favorites/ になります）
     path('favorites/', FavoriteListView.as_view(), name='favorite_list'),
@@ -44,8 +44,7 @@ urlpatterns = [
 
     # 予約関連 (reservations_view.py)
     path('reservations/', ReservationListView.as_view(), name='reservation_list'),
-    path('reservations/<int:pk>/', ReservationDetailView.as_view(), name='reservation_detail'),
-    path('reservations/create/', ReservationCreateView.as_view(), name='reservation_create'),
+    path('restaurants/<int:restaurant_id>/reserve/', views.ReservationCreateView.as_view(), name='reservation_create'),
     path('reservations/<int:pk>/delete/', ReservationDeleteView.as_view(), name='reservation_delete'),
 
     # カテゴリ関連 (categories_view.py)
