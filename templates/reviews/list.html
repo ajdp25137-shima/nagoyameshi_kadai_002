@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}自分のレビュー一覧 | Nagoyameshi{% endblock %}
+
+{% block extra_css %}
+<style>
+    .review-item {
+        background-color: #ffffff;
+        border-left: 5px solid var(--wagashi-red);
+        transition: 0.3s;
+    }
+    .review-item:hover {
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+    .restaurant-name {
+        color: var(--katsu-iro);
+        font-weight: bold;
+        font-size: 1.2rem;
+        text-decoration: none;
+    }
+    .restaurant-name:hover {
+        color: var(--wagashi-red);
+    }
+    .score-stars {
+        color: #ffc107;
+    }
+    .action-links a {
+        font-size: 0.9rem;
+        text-decoration: none;
+        margin-left: 15px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-9">
+        <h2 class="mb-4" style="color: var(--katsu-iro); border-bottom: 2px solid var(--wagashi-red); padding-bottom: 10px;">
+            投稿したレビュー一覧
+        </h2>
+
+        {% if reviews %}
+            {% for review in reviews %}
+                <div class="card review-item mb-3 border-top-0 border-end-0 border-bottom-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <a href="{% url 'restaurant_detail' review.restaurant.pk %}" class="restaurant-name">
+                                    {{ review.restaurant.name }}
+                                </a>
+                                <div class="mt-1">
+                                    <span class="score-stars">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= review.score %}
+                                                <i class="fa-solid fa-star"></i>
+                                            {% else %}
+                                                <i class="fa-regular fa-star"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </span>
+                                    <span class="ms-2 text-muted small">{{ review.created_at|date:"Y/m/d H:i" }}</span>
+                                </div>
+                            </div>
+                            <div class="action-links">
+                                <a href="{% url 'review_edit' review.pk %}" class="btn btn-sm btn-outline-primary">編集</a>
+                                
+                                <a href="{% url 'review_delete' review.pk %}" class="btn btn-sm btn-outline-danger">削除</a>
+                                
+                            </div>
+                        </div>
+                        <p class="card-text mt-3">{{ review.content }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+
+            {# ページネーション（5件ずつ表示用） #}
+            {% if is_paginated %}
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link text-dark" href="?page={{ page_obj.previous_page_number }}">前へ</a></li>
+                    {% endif %}
+                    
+                    <li class="page-item active"><span class="page-link" style="background-color: var(--katsu-iro); border-color: var(--katsu-iro);">{{ page_obj.number }}</span></li>
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link text-dark" href="?page={{ page_obj.next_page_number }}">次へ</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+
+        {% else %}
+            <div class="text-center py-5">
+                <p class="text-muted">まだ投稿したレビューはありません。</p>
+                <a href="{% url 'top_page' %}" class="btn btn-outline-primary">お店を探してレビューを書く</a>
+            </div>
+        {% endif %}
+    </div>
+    <div class="mt-4 text-center">
+      <a href="{% url 'top_page' %}" class="btn btn-outline-secondary">トップページへ戻る</a>
+    </div>
+</div>
+{% endblock %}

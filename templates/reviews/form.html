@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}レビュー投稿 | Nagoyameshi{% endblock %}
+
+{% block extra_css %}
+<style>
+    .review-card {
+        background-color: #ffffff;
+        border: 1px solid var(--katsu-iro);
+        box-shadow: 4px 4px 0px rgba(0, 43, 65, 0.1);
+        padding: 30px;
+    }
+    .form-label {
+        font-weight: bold;
+        color: var(--katsu-iro);
+    }
+    .btn-submit {
+        background-color: var(--wagashi-red);
+        color: white;
+        border: none;
+        padding: 10px 30px;
+    }
+    .btn-submit:hover {
+        background-color: #8e242a;
+        color: white;
+    }
+    .btn-cancel {
+        background-color: transparent;
+        border: 1px solid #ccc;
+        color: #666;
+    }
+    .star-rating {
+        color: #ffc107;
+        font-size: 1.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'top_page' %}" class="text-decoration-none">トップ</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'restaurant_detail' restaurant.pk %}" class="text-decoration-none">{{ restaurant.name }}</a></li>
+                <li class="breadcrumb-item active">レビュー投稿</li>
+            </ol>
+        </nav>
+
+        <div class="review-card mt-4">
+            <h2 class="text-center mb-4" style="color: var(--katsu-iro);">
+                <i class="fa-solid fa-pen-nib me-2"></i>レビューを投稿する
+            </h2>
+            <p class="text-center text-muted mb-4">「{{ restaurant.name }}」での体験を共有しましょう</p>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="mb-4 text-center">
+                    <label class="form-label d-block">評価</label>
+                    <div class="star-rating">
+                        {{ form.score }} 
+                        {# ※form.scoreはDjangoのRadioSelectなどで1-5の選択肢になっている想定 #}
+                    </div>
+                    {% if form.score.errors %}
+                        <div class="text-danger small">{{ form.score.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">投稿者名の表示</label>
+                    <div class="p-3 border rounded bg-light">
+                        <div class="form-check mb-2">
+                            {{ form.is_anonymous }}
+                            <label class="form-check-label" for="{{ form.is_anonymous.id_for_label }}">
+                                匿名で投稿する
+                            </label>
+                        </div>
+                        <p class="small text-muted mb-0">
+                            <i class="fa-solid fa-info-circle me-1"></i>
+                            表示される名前: 
+                            <strong>
+                                {% if user.first_name or user.last_name %}
+                                    {{ user.last_name }} {{ user.first_name }}
+                                {% else %}
+                                    匿名（会員情報の名前が未入力です）
+                                {% endif %}
+                            </strong>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="{{ form.content.id_for_label }}" class="form-label">コメント</label>
+                    {{ form.content }}
+                    {# ※widgetsで class="form-control", rows="5" を指定している想定 #}
+                    {% if form.content.errors %}
+                        <div class="text-danger small">{{ form.content.errors }}
