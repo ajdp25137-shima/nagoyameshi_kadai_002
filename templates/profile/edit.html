@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}会員情報編集 | Nagoyameshi{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <h2 class="section-title mb-4">Edit Profile <small class="text-muted">- 会員情報編集 -</small></h2>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4 p-lg-5">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        {% for field in form %}
+                        <div class="mb-4">
+                            <label class="form-label fw-bold small text-muted">
+                                {{ field.label }} 
+                                {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+                            </label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in field.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        <div class="d-grid gap-2 mt-5">
+                            <button type="submit" class="btn btn-nagoya py-2 fw-bold">
+                                保存する (Save)
+                            </button>
+                            <a href="{% url 'profile_detail' %}" class="btn btn-link text-muted text-decoration-none small">
+                                キャンセル
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* 編集画面の入力フォームのデザインを調整 */
+    input, select, textarea {
+        display: block;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        font-size: 1rem;
+        border: 1px solid #ced4da;
+        border-radius: 0; /* 和風デザインの一貫性 */
+        background-color: #fff;
+    }
+    input:focus {
+        border-color: var(--wagashi-red);
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(186, 38, 54, 0.1);
+    }
+</style>
+{% endblock %}

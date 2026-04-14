@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}会員情報 | Nagoyameshi{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="section-title mb-4">Account Information <small class="text-muted">- 会員情報 -</small></h2>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4 p-lg-5">
+                    <table class="table table-borderless align-middle mb-4">
+                        <tbody class="border-top border-bottom">
+                            <tr>
+                                <th class="py-3 px-2 text-muted fw-bold" style="width: 30%;">名前</th>
+                                <td class="py-3 px-2">{{ user.name }}</td>
+                            </tr>
+                            <tr>
+                                <th class="py-3 px-2 text-muted fw-bold">メールアドレス</th>
+                                <td class="py-3 px-2">{{ user.email }}</td>
+                            </tr>
+                            <tr>
+                                <th class="py-3 px-2 text-muted fw-bold">パスワード</th>
+                                <td class="py-3 px-2">
+                                    <span class="me-3">********</span>
+                                    <a href=# class="btn btn-sm btn-outline-secondary">
+                                        再設定する
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="py-3 px-2 text-muted fw-bold">郵便番号</th>
+                                <td class="py-3 px-2">〒 {{ user.postal_code }}</td>
+                            </tr>
+                            <tr>
+                                <th class="py-3 px-2 text-muted fw-bold">住所</th>
+                                <td class="py-3 px-2">{{ user.address }}</td>
+                            </tr>
+                            <tr>
+                                <th class="py-3 px-2 text-muted fw-bold">電話番号</th>
+                                <td class="py-3 px-2">{{ user.phone_number }}</td>
+                            </tr>
+                            <tr>
+                                <th class="py-3 px-2 text-muted fw-bold">会員区分</th>
+                                <td class="py-3 px-2">
+                                    {% if user.is_premium %}
+                                        <span class="badge bg-warning text-dark"><i class="fa-solid fa-crown me-1"></i>有料会員</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">無料会員</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="{% url 'top_page' %}" class="btn btn-outline-secondary px-4 py-2">
+                            <i class="fa-solid fa-arrow-left me-1"></i>戻る
+                        </a>
+                        <a href="{% url 'profile_edit' %}" class="btn btn-nagoya px-5 py-2">
+                            編集する (Edit)
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
