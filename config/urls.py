@@ -24,6 +24,7 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
+    path('', include('base.urls')),
     path('admin/', admin.site.urls),
     path('users/create/', UserCreateView.as_view(), name='user_create'),
     path('admins/', AdminListView.as_view(), name='admin_list'),

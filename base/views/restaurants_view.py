@@ -1,6 +1,13 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from base.models import Restaurant
+from base.models import Restaurant, Category
+from django.shortcuts import render
+
+
+def top_page(request):
+    # render関数で、templatesフォルダ内のHTMLを指定します
+    return render(request, 'pages/top.html')
+
 
 # 一覧
 class RestaurantListView(ListView):
@@ -61,3 +68,5 @@ class RestaurantDeleteView(DeleteView):
     model = Restaurant
     template_name = 'restaurants/delete.html'
     success_url = reverse_lazy('restaurant_list')
+
+    
