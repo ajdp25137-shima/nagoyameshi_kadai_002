@@ -36,7 +36,17 @@ urlpatterns = [
     path('restaurant/<int:restaurant_id>/reviews/', views.ReviewListView.as_view(), name='review_list'),
     path('restaurant/<int:restaurant_id>/reviews/add/', views.ReviewCreateView.as_view(), name='review_create'),
     path('company/', views.CompanyInformationDetailView.as_view(), name='company_info'),
-    path('favorites/', include('base.urls'))
+    path('favorites/', include('base.urls')),
+    # サブスクリプション
+    path('subscription/', views.SubscriptionCreateView.as_view(), name='subscription_create'),
+    path('subscription/complete/', views.SubscriptionCompleteView.as_view(), name='subscription_complete'),
+    path('subscription/cancel/', views.SubscriptionCancelView.as_view(), name='subscription_cancel'),
+    path('subscription/cancel/complete/', views.SubscriptionCancelCompleteView.as_view(), name='subscription_cancel_complete'),
+    path('subscription/payment/', views.PaymentMethodUpdateView.as_view(), name='payment_update'),
+    path('subscription/payment/complete/', views.PaymentUpdateCompleteView.as_view(), name='payment_update_complete'),
+    path('subscription/setup-intent/', views.CreatePaymentIntentView.as_view(), name='create_setup_intent'),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

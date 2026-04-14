@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}有料会員解約 - なごやめし{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h2 class="mb-4">有料会員の解約</h2>
+            <div class="card">
+                <div class="card-body">
+                    <p>解約すると以下の機能が利用できなくなります。</p>
+                    <ul class="text-start">
+                        <li>お気に入り店舗の登録</li>
+                        <li>レストランの予約</li>
+                        <li>レビューの投稿</li>
+                    </ul>
+                    <p class="text-danger mt-3">本当に解約しますか?</p>
+                    <form method="post" action="{% url 'subscription_cancel' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">解約する</button>
+                        <a href="{% url 'top_page' %}" class="btn btn-secondary ms-2">戻る</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

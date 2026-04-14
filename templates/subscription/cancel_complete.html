@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}解約完了 - なごやめし{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center">
+    <h2 class="mb-4">解約が完了しました</h2>
+    <p>有料会員のサブスクリプションを解約しました。</p>
+    <p>無料会員として引き続きご利用いただけます。</p>
+    <a href="{% url 'top_page' %}" class="btn btn-reserve mt-3">トップページへ</a>
+</div>
+{% endblock %}
+
