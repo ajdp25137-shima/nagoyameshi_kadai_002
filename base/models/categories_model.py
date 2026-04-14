@@ -6,6 +6,7 @@ class Category(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        # admin画面での表示
         verbose_name = "カテゴリ"
         verbose_name_plural = "カテゴリ"
 

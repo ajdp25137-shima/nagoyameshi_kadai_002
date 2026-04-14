@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 
 class UserManager(BaseUserManager):
@@ -12,15 +12,21 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    # Userモデルは管理者用ではないため、create_superuser は不要ですが
-    # 残しておいても問題ありません。
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('name', '管理者')
+        extra_fields.setdefault('postal_code', '000-0000')
+        extra_fields.setdefault('address', '-')
+        extra_fields.setdefault('phone_number', '000-0000-0000')
+        return self.create_user(email, password, **extra_fields)
 
-class User(AbstractBaseUser): # PermissionsMixin を外す（または下記のように related_name を設定）
+
+class User(AbstractBaseUser, PermissionsMixin):
     class UserClass(models.TextChoices):
         FREE = "free", "無料会員"
         PREMIUM = "premium", "有料会員"
 
-    
 
     name = models.CharField("氏名", max_length=100) # 日本語名を追加
     email = models.EmailField("メールアドレス", unique=True)

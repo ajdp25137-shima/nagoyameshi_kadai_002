@@ -45,6 +45,7 @@ urlpatterns = [
     path('subscription/payment/', views.PaymentMethodUpdateView.as_view(), name='payment_update'),
     path('subscription/payment/complete/', views.PaymentUpdateCompleteView.as_view(), name='payment_update_complete'),
     path('subscription/setup-intent/', views.CreatePaymentIntentView.as_view(), name='create_setup_intent'),
+    path('accounts/', include('allauth.urls')),
 
 ]
 

@@ -44,7 +44,8 @@ class Admin(AbstractUser):
 
     def __str__(self):
         return self.email
-    
+
+    # admin画面での表示
     class Meta:
-        verbose_name = "管理者"          # 単数形での表示名
-        verbose_name_plural = "管理者"   # 複数形での表示名（日本語なら同じでOK）
+        verbose_name = "管理者"
+        verbose_name_plural = "管理者"
