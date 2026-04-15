@@ -5,27 +5,39 @@
 
 {% block extra_css %}
 <style>
-    /* ヒーローセクション（和風背景など） */
+    /* ヒーローセクションの修正 */
     .hero-section {
-        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('{% static "images/nagoya_bg.jpg" %}');
+        /* 保存した画像を背景に指定 */
+        background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3)), url('{% static "images/top_image.jpg" %}');
         background-size: cover;
         background-position: center;
-        color: white;
-        padding: 80px 0;
+        /* 高さを少し出し、イラストが見えるように調整 */
+        min-height: 450px;
+        display: flex;
+        align-items: center;
+        color: #333;
         text-align: center;
         border-bottom: 5px solid var(--wagashi-red);
+        margin-bottom: 3rem;
     }
 
-    /* 検索ボックスの装飾 */
+    /* 文字の視認性を上げるためのシャドウ（必要に応じて） */
+    .hero-section h1 {
+        font-family: 'Noto Serif JP', serif;
+        text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
+        color: var(--katsu-iro);
+    }
+
+    /* 検索ボックスの装飾（透過度を調整して背景を見せる） */
     .search-container {
-        background-color: rgba(255, 255, 255, 0.95);
+        background-color: rgba(255, 255, 255, 0.9);
         padding: 30px;
-        border-radius: 0;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border-radius: 8px; /* 少し丸みを持たせてモダンに */
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         color: #333;
     }
 
-    /* カテゴリボタン（和風パレット） */
+    /* --- 以下、既存のスタイル --- */
     .btn-category {
         border: 1px solid var(--katsu-iro);
         color: var(--katsu-iro);
@@ -38,8 +50,6 @@
         background: var(--katsu-iro);
         color: white;
     }
-
-    /* セクションの見出し */
     .section-title {
         border-left: 5px solid var(--wagashi-red);
         padding-left: 15px;
@@ -47,22 +57,13 @@
         margin-bottom: 30px;
         color: var(--katsu-iro);
     }
-
-    /* レストランカード */
     .restaurant-card {
         border: none;
         box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         transition: transform 0.3s;
     }
-    .restaurant-card:hover {
-        transform: translateY(-5px);
-    }
-
-    .rating-star {
-        color: #ffc107; /* ゴールド */
-    }
-
-    /* 下部リンクエリア */
+    .restaurant-card:hover { transform: translateY(-5px); }
+    .rating-star { color: #ffc107; }
     .footer-links {
         border-top: 1px solid #ddd;
         padding-top: 30px;
@@ -83,13 +84,11 @@
 {% endblock %}
 
 {% block content %}
-
-<section class="hero-section mb-5">
+<section class="hero-section">
     <div class="container">
-        <h1 class="display-4 fw-bold mb-4">Discover Nagoya Gourmet</h1>
+        
         <div class="search-container mx-auto" style="max-width: 800px;">
             <form action="{% url 'restaurant_list' %}" method="get">
-                
                 <div class="input-group mb-4">
                     <span class="input-group-text bg-white border-end-0"><i class="fa-solid fa-magnifying-glass"></i></span>
                     <input type="text" name="keyword" class="form-control border-start-0" placeholder="店名・キーワードを入力">
@@ -171,5 +170,4 @@
         </a>
     </div>
 </div>
-
 {% endblock %}

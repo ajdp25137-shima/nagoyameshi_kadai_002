@@ -43,7 +43,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{% url 'top_page' %}" class="text-decoration-none">トップ</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'restaurant_detail' restaurant.pk %}" class="text-decoration-none">{{ restaurant.name }}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'restaurant_detail' review.restaurant.pk %}" class="text-decoration-none">{{ restaurant.name }}</a></li>
                 <li class="breadcrumb-item active">レビュー投稿</li>
             </ol>
         </nav>
@@ -61,7 +61,6 @@
                     <label class="form-label d-block">評価</label>
                     <div class="star-rating">
                         {{ form.score }} 
-                        {# ※form.scoreはDjangoのRadioSelectなどで1-5の選択肢になっている想定 #}
                     </div>
                     {% if form.score.errors %}
                         <div class="text-danger small">{{ form.score.errors }}</div>
@@ -94,6 +93,19 @@
                 <div class="mb-4">
                     <label for="{{ form.content.id_for_label }}" class="form-label">コメント</label>
                     {{ form.content }}
-                    {# ※widgetsで class="form-control", rows="5" を指定している想定 #}
                     {% if form.content.errors %}
-                        <div class="text-danger small">{{ form.content.errors }}
+                        <div class="text-danger small">{{ form.content.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'restaurant_detail' review.restaurant.pk %}" class="btn btn-cancel px-4">キャンセル</a>
+                    <button type="submit" class="btn btn-submit shadow-sm">
+                        投稿する
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

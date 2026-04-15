@@ -6,16 +6,14 @@
     <title>{% block title %}Nagoyameshiーなごやめしー{% endblock %}</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@700&family=Sawarabi+Mincho&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --wagashi-red: #B22D35; /* 伝統的な朱色 */
-            --katsu-iro: #002B41;   /* 藍色（勝色） */
-            --washi-bg: #F9F7F2;    /* 和紙のような柔らかな白 */
+            --wagashi-red: #B22D35;
+            --katsu-iro: #002B41;
+            --washi-bg: #F9F7F2;
         }
 
         body {
@@ -27,7 +25,6 @@
             min-height: 100vh;
         }
 
-        /* ナビゲーションバーの装飾 */
         .navbar {
             background-color: #ffffff;
             border-bottom: 3px solid var(--wagashi-red);
@@ -38,7 +35,7 @@
             font-family: 'Noto Serif JP', serif;
             font-weight: bold;
             color: var(--katsu-iro) !important;
-            font-size: 1.6rem;
+            font-size: 2.6rem;
         }
 
         .navbar-brand span {
@@ -57,24 +54,14 @@
             color: var(--wagashi-red) !important;
         }
 
-        /* ドロップダウンの和風アレンジ */
         .dropdown-menu {
             border-radius: 0;
             border: 1px solid var(--katsu-iro);
             box-shadow: 4px 4px 0px rgba(0, 43, 65, 0.1);
         }
 
-        .dropdown-item:hover {
-            background-color: var(--washi-bg);
-            color: var(--wagashi-red);
-        }
+        main { flex: 1; }
 
-        /* メインコンテンツエリア */
-        main {
-            flex: 1;
-        }
-
-        /* フッター */
         footer {
             background-color: var(--katsu-iro);
             color: #d1d1d1;
@@ -85,44 +72,35 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    {% block navbar %}
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
             <a class="navbar-brand" href="{% url 'top_page' %}">
                 Nagoyameshi<span>-なごやめし-</span>
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-lg-center">
-
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
                                 <i class="fa-solid fa-circle-user me-1"></i>マイページ
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="{% url 'profile_detail' %}"><i class="fa-solid fa-address-card me-2"></i>会員情報</a></li>
 
                                 {% if user.user_class == 'premium' %}
-                                    {# --- 有料会員限定メニュー --- #}
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="{% url 'reservation_list' %}"><i class="fa-solid fa-calendar-check me-2"></i>予約一覧</a></li>
                                     <li><a class="dropdown-item" href="{% url 'favorite_list' %}"><i class="fa-solid fa-heart me-2"></i>お気に入り一覧</a></li>
-
-                                    {# もし「自分のレビュー一覧」というURLを作っている場合はここに追加 #}
-                                    {# 暫定で review_list にしていますが、自分専用のビュー名に合わせてください #}
                                     <li><a class="dropdown-item" href="{% url 'review_list' user.id %}"><i class="fa-solid fa-pen-to-square me-2"></i>レビュー一覧</a></li>
-
                                     <li><a class="dropdown-item" href="{% url 'payment_update' %}"><i class="fa-solid fa-credit-card me-2"></i>支払い情報編集</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item text-muted" href="{% url 'subscription_cancel' %}"><i class="fa-solid fa-handshake-slash me-2"></i>有料会員解約</a></li>
-
                                 {% else %}
-                                    {# --- 無料会員向けメニュー --- #}
                                     <li><a class="dropdown-item" href="{% url 'subscription_create' %}"><i class="fa-solid fa-gem me-2" style="color: gold;"></i>有料会員登録</a></li>
                                 {% endif %}
                             </ul>
@@ -130,34 +108,22 @@
                         <li class="nav-item ms-lg-3">
                             <form action="{% url 'account_logout' %}" method="post" class="d-inline">
                                 {% csrf_token %}
-                                <button type="submit" class="nav-link btn btn-link" style="text-decoration: none;">
+                                <button type="submit" class="nav-link btn btn-link" style="text-decoration: none; border: none; background: none;">
                                     <i class="fa-solid fa-right-from-bracket me-1"></i>ログアウト
                                 </button>
                             </form>
                         </li>
-
                     {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'account_signup' %}">
-                                <i class="fa-solid fa-user-plus me-1"></i>会員登録
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'account_login' %}">
-                                <i class="fa-solid fa-right-to-bracket me-1"></i>ログイン
-                            </a>
-                        </li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'account_signup' %}"><i class="fa-solid fa-user-plus me-1"></i>会員登録</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'account_login' %}"><i class="fa-solid fa-right-to-bracket me-1"></i>ログイン</a></li>
                     {% endif %}
-                    
                 </ul>
             </div>
         </div>
     </nav>
-    {% endblock %}
 
     <main class="container py-4">
-        {% block content %}
-        {% endblock %}
+        {% block content %}{% endblock %}
     </main>
 
     <footer class="text-center">

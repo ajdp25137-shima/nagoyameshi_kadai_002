@@ -21,4 +21,4 @@ class Favorite(models.Model):
 
     def __str__(self):
         # Userモデルのフィールド名に合わせて調整してください（username or name）
-        return f"{self.user.username} - {self.restaurant.name}"
+        return f"{self.user.user.email} - {self.restaurant.name}"

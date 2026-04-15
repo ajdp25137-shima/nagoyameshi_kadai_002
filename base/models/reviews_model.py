@@ -20,7 +20,7 @@ class Review(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.user.name} - {self.restaurant.name} ({self.rating})"
+        return f"{self.user.email} - {self.restaurant.name} ({self.rating})"
 
     class Meta:
         verbose_name = "レビュー"
