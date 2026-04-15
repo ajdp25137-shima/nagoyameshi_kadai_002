@@ -5,51 +5,89 @@
 
 {% block extra_css %}
 <style>
-    /* ヒーローセクションの修正 */
-    .hero-section {
-        /* 保存した画像を背景に指定 */
-        background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3)), url('{% static "images/top_image.jpg" %}');
-        background-size: cover;
-        background-position: center;
-        /* 高さを少し出し、イラストが見えるように調整 */
-        min-height: 450px;
-        display: flex;
-        align-items: center;
-        color: #333;
-        text-align: center;
+    /* ヒーローイメージ（横幅いっぱい） */
+    .hero-wrapper {
+        position: relative;
+        width: 100%;
+        height: 500px;
+        overflow: hidden;
         border-bottom: 5px solid var(--wagashi-red);
+    }
+    .hero-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* 画像上の検索ボックス（中央上側） */
+    .hero-search-overlay {
+        position: absolute;
+        top: 20%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 700px;
+        z-index: 10;
+    }
+
+    .search-box-white {
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    /* --- カテゴリ検索セクションのスタイル変更 --- */
+    .category-section {
+        background-color: #f8f9fa; /* 背景を少しグレーにして区切る */
+        padding: 60px 0; /* 上下の余白 */
         margin-bottom: 3rem;
     }
 
-    /* 文字の視認性を上げるためのシャドウ（必要に応じて） */
-    .hero-section h1 {
-        font-family: 'Noto Serif JP', serif;
-        text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
-        color: var(--katsu-iro);
+    .category-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 15px;
+        max-width: 1000px;
+        margin: 0 auto;
     }
 
-    /* 検索ボックスの装飾（透過度を調整して背景を見せる） */
-    .search-container {
-        background-color: rgba(255, 255, 255, 0.9);
-        padding: 30px;
-        border-radius: 8px; /* 少し丸みを持たせてモダンに */
-        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        color: #333;
-    }
-
-    /* --- 以下、既存のスタイル --- */
-    .btn-category {
-        border: 1px solid var(--katsu-iro);
-        color: var(--katsu-iro);
+    .category-card-btn {
         background: white;
-        margin: 5px;
-        transition: 0.3s;
-        border-radius: 0;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px 10px;
+        text-align: center;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        color: var(--katsu-iro);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
     }
-    .btn-category:hover {
+
+    .category-card-btn i {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        color: var(--wagashi-red);
+    }
+
+    .category-card-btn:hover {
         background: var(--katsu-iro);
         color: white;
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        border-color: var(--katsu-iro);
     }
+    
+    .category-card-btn:hover i {
+        color: white;
+    }
+
+    /* 共通設定 */
     .section-title {
         border-left: 5px solid var(--wagashi-red);
         padding-left: 15px;
@@ -57,6 +95,7 @@
         margin-bottom: 30px;
         color: var(--katsu-iro);
     }
+
     .restaurant-card {
         border: none;
         box-shadow: 0 4px 15px rgba(0,0,0,0.05);
@@ -64,40 +103,29 @@
     }
     .restaurant-card:hover { transform: translateY(-5px); }
     .rating-star { color: #ffc107; }
-    .footer-links {
-        border-top: 1px solid #ddd;
-        padding-top: 30px;
-        margin-top: 60px;
-        padding-bottom: 40px;
-    }
-    .footer-links a {
-        color: var(--katsu-iro);
-        text-decoration: none;
-        margin: 0 15px;
-        font-weight: bold;
-    }
-    .footer-links a:hover {
-        text-decoration: underline;
-        color: var(--wagashi-red);
+
+    @media (max-width: 768px) {
+        .hero-wrapper { height: 350px; }
+        .hero-search-overlay { top: 15%; }
+        .category-grid { grid-template-columns: repeat(3, 1fr); }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<section class="hero-section">
-    <div class="container">
-        
-        <div class="search-container mx-auto" style="max-width: 800px;">
+<div class="hero-wrapper">
+    <img src="{% static 'images/top_image.jpg' %}" alt="Nagoyameshi" class="hero-image">
+    
+    <div class="hero-search-overlay">
+        <div class="search-box-white">
+            <h3 class="text-center mb-4" style="font-family: 'Noto Serif JP', serif; color: var(--katsu-iro);">名古屋の「おいしい」を見つけよう</h3>
             <form action="{% url 'restaurant_list' %}" method="get">
-                <div class="input-group mb-4">
+                <div class="input-group mb-3">
                     <span class="input-group-text bg-white border-end-0"><i class="fa-solid fa-magnifying-glass"></i></span>
                     <input type="text" name="keyword" class="form-control border-start-0" placeholder="店名・キーワードを入力">
-                    <button class="btn btn-nagoya" type="submit">検索</button>
                 </div>
-
-                <div class="row g-3">
-                    <div class="col-md-6 text-start">
-                        <label class="form-label fw-bold"><i class="fa-solid fa-yen-sign me-2"></i>予算で探す</label>
+                <div class="row g-2">
+                    <div class="col-8">
                         <select name="price" class="form-select">
                             <option value="">予算を選択</option>
                             <option value="1000">〜¥1,000</option>
@@ -106,19 +134,48 @@
                             <option value="10000">¥10,000〜</option>
                         </select>
                     </div>
-                    <div class="col-md-6 text-start">
-                        <label class="form-label fw-bold"><i class="fa-solid fa-utensils me-2"></i>カテゴリで探す</label>
-                        <div class="d-flex flex-wrap">
-                            {% for category in categories|slice:":4" %}
-                            <button type="submit" name="category" value="{{ category.id }}" class="btn btn-sm btn-category">{{ category.name }}</button>
-                            {% endfor %}
-                        </div>
+                    <div class="col-4">
+                        <button class="btn btn-nagoya w-100" type="submit">検索</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-</section>
+</div>
+
+<div class="category-section">
+    <div class="container text-center">
+        <h4 class="mb-4" style="font-family: 'Noto Serif JP', serif; color: var(--katsu-iro);">
+            <i class="fa-solid fa-utensils me-2 text-danger"></i>Category Search
+        </h4>
+        <div class="category-grid">
+            {% for category in categories|slice:":12" %}
+            <form action="{% url 'restaurant_list' %}" method="get" class="h-100">
+                <button type="submit" name="category" value="{{ category.id }}" class="category-card-btn">
+                    {% if "ひつまぶし" in category.name %}
+                        <i class="fa-solid fa-bowl-rice"></i>
+                    {% elif "みそかつ" in category.name %}
+                        <i class="fa-solid fa-utensils"></i>
+                    {% elif "エビフライ" in category.name %}
+                        <i class="fa-solid fa-shrimp"></i>
+                    {% elif "カレーうどん" in category.name or "味噌煮込み" in category.name or "きしめん" in category.name %}
+                        <i class="fa-solid fa-bowl-food"></i>
+                    {% elif "台湾ラーメン" in category.name %}
+                        <i class="fa-solid fa-pepper-hot"></i>
+                    {% elif "あんかけスパ" in category.name %}
+                        <i class="fa-solid fa-plate-wheat"></i>
+                    {% elif "小倉トースト" in category.name %}
+                        <i class="fa-solid fa-bread-slice"></i>
+                    {% else %}
+                        <i class="fa-solid fa-shop"></i>
+                    {% endif %}
+                    <span class="fw-bold">{{ category.name }}</span>
+                </button>
+            </form>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 
 <div class="container">
     <section class="mb-5">
@@ -161,13 +218,9 @@
         </div>
     </section>
 
-    <div class="footer-links text-center">
-        <a href="{% url 'info_detail' %}">
-            <i class="fa-solid fa-building me-1"></i>会社概要 (About Us)
-        </a>
-        <a href="{% url 'terms_of_use' %}">
-            <i class="fa-solid fa-file-contract me-1"></i>利用規約 (Terms of Service)
-        </a>
+    <div class="footer-links text-center py-4">
+        <a href="{% url 'info_detail' %}" class="me-3"><i class="fa-solid fa-building me-1"></i>会社概要 (About Us)</a>
+        <a href="{% url 'terms_of_use' %}"><i class="fa-solid fa-file-contract me-1"></i>利用規約 (Terms of Service)</a>
     </div>
 </div>
 {% endblock %}
